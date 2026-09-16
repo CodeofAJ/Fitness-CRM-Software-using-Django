@@ -3,9 +3,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
+from members.views import test_ui
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("test-ui/", test_ui, name="test-ui"),
 ]
 
 

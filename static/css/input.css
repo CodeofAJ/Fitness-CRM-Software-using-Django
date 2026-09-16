@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@source "../../templates";
+@source "../../accounts";
+@source "../../members";
+@source "../../memberships";
+@source "../../attendance";
+@source "../../payments";
+@source "../../trainers";
+@source "../../reports";
+
+@plugin "daisyui";
