@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en" data-theme="corporate">
+<html lang="en" data-theme="gms-light">
 
 <head>
 
@@ -79,6 +79,49 @@
     {% block extra_js %}
     {% endblock %}
 
+<script>
+    const savedTheme = localStorage.getItem("gms-theme");
+
+    if (savedTheme) {
+        document.documentElement.setAttribute("data-theme", savedTheme);
+    }
+
+    function toggleTheme() {
+        const currentTheme =
+            document.documentElement.getAttribute("data-theme");
+
+        const newTheme =
+            currentTheme === "gms-dark"
+                ? "gms-light"
+                : "gms-dark";
+
+        document.documentElement.setAttribute("data-theme", newTheme);
+
+        localStorage.setItem("gms-theme", newTheme);
+
+        updateThemeIcon();
+    }
+
+    function updateThemeIcon() {
+        const theme =
+            document.documentElement.getAttribute("data-theme");
+
+        const sunIcon = document.getElementById("sun-icon");
+        const moonIcon = document.getElementById("moon-icon");
+
+        if (theme === "gms-dark") {
+            sunIcon.classList.remove("hidden");
+            moonIcon.classList.add("hidden");
+        } else {
+            sunIcon.classList.add("hidden");
+            moonIcon.classList.remove("hidden");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", updateThemeIcon);
+</script>
+
+    
 </body>
 
 </html>

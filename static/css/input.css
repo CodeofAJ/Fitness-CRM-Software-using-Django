@@ -10,3 +10,75 @@
 @source "../../reports";
 
 @plugin "daisyui";
+
+@plugin "daisyui/theme" {
+    name: "gms-light";
+    default: true;
+    prefersdark: false;
+    color-scheme: light;
+
+    --color-base-100: #ffffff;
+    --color-base-200: #f8fafc;
+    --color-base-300: #e2e8f0;
+    --color-base-content: #1e293b;
+
+    --color-primary: #f97316;
+    --color-primary-content: #ffffff;
+
+    --color-secondary: #ea580c;
+    --color-secondary-content: #ffffff;
+
+    --color-accent: #fb923c;
+    --color-accent-content: #ffffff;
+
+    --color-neutral: #1e293b;
+    --color-neutral-content: #ffffff;
+
+    --color-info: #0ea5e9;
+    --color-info-content: #ffffff;
+
+    --color-success: #22c55e;
+    --color-success-content: #ffffff;
+
+    --color-warning: #f59e0b;
+    --color-warning-content: #ffffff;
+
+    --color-error: #ef4444;
+    --color-error-content: #ffffff;
+}
+
+@plugin "daisyui/theme" {
+    name: "gms-dark";
+    default: false;
+    prefersdark: true;
+    color-scheme: dark;
+
+    --color-base-100: #0f172a;
+    --color-base-200: #020617;
+    --color-base-300: #1e293b;
+    --color-base-content: #e2e8f0;
+
+    --color-primary: #fb923c;
+    --color-primary-content: #431407;
+
+    --color-secondary: #f97316;
+    --color-secondary-content: #431407;
+
+    --color-accent: #fdba74;
+    --color-accent-content: #431407;
+
+    --color-neutral: #1e293b;
+    --color-neutral-content: #f8fafc;
+
+    --color-info: #38bdf8;
+    --color-info-content: #082f49;
+
+    --color-success: #4ade80;
+    --color-success-content: #052e16;
+
+    --color-warning: #fbbf24;
+    --color-warning-content: #451a03;
+
+    --color-error: #f87171;
+    --color-error-content: #450a0a;
+}
