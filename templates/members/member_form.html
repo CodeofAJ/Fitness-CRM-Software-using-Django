@@ -1,0 +1,375 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Add Member | GMS
+{% endblock %}
+
+
+{% block content %}
+
+<div class="mx-auto max-w-5xl space-y-6">
+
+    <!-- Header -->
+    <div>
+
+        <div class="breadcrumbs text-sm">
+            <ul>
+                <li>
+                    <a href="{% url 'members:list' %}">
+                        Members
+                    </a>
+                </li>
+
+                <li>
+                    Add Member
+                </li>
+            </ul>
+        </div>
+
+        <h1 class="mt-3 text-2xl font-bold">
+            Add New Member
+        </h1>
+
+        <p class="mt-1 text-sm text-base-content/60">
+            Create a new member profile for your gym.
+        </p>
+
+    </div>
+
+
+    <!-- Form -->
+    <div class="card border border-base-300 bg-base-100 shadow-sm">
+
+        <div class="card-body">
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+                class="space-y-8">
+
+                {% csrf_token %}
+
+
+                <!-- Basic Information -->
+                <section>
+
+                    <div class="mb-5">
+
+                        <h2 class="text-lg font-semibold">
+                            Basic Information
+                        </h2>
+
+                        <p class="text-sm text-base-content/60">
+                            Enter the member's basic details.
+                        </p>
+
+                    </div>
+
+
+                    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+                        <!-- Member ID -->
+                        <div class="form-control">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Member ID
+                                </span>
+                            </label>
+
+                            {{ form.member_id }}
+
+                            {% if form.member_id.errors %}
+                                <p class="mt-1 text-sm text-error">
+                                    {{ form.member_id.errors.0 }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Full Name -->
+                        <div class="form-control">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Full Name
+                                </span>
+                            </label>
+
+                            {{ form.full_name }}
+
+                            {% if form.full_name.errors %}
+                                <p class="mt-1 text-sm text-error">
+                                    {{ form.full_name.errors.0 }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Date of Birth -->
+                        <div class="form-control">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Date of Birth
+                                </span>
+                            </label>
+
+                            {{ form.date_of_birth }}
+
+                            {% if form.date_of_birth.errors %}
+                                <p class="mt-1 text-sm text-error">
+                                    {{ form.date_of_birth.errors.0 }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Gender -->
+                        <div class="form-control">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Gender
+                                </span>
+                            </label>
+
+                            {{ form.gender }}
+
+                        </div>
+
+
+                        <!-- Phone -->
+                        <div class="form-control">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Phone
+                                </span>
+                            </label>
+
+                            {{ form.phone }}
+
+                            {% if form.phone.errors %}
+                                <p class="mt-1 text-sm text-error">
+                                    {{ form.phone.errors.0 }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Email -->
+                        <div class="form-control">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Email
+                                </span>
+                            </label>
+
+                            {{ form.email }}
+
+                            {% if form.email.errors %}
+                                <p class="mt-1 text-sm text-error">
+                                    {{ form.email.errors.0 }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <div class="divider"></div>
+
+
+                <!-- Profile Photo -->
+                <section>
+
+                    <div class="mb-5">
+
+                        <h2 class="text-lg font-semibold">
+                            Profile Photo
+                        </h2>
+
+                        <p class="text-sm text-base-content/60">
+                            Upload a profile photo for the member.
+                        </p>
+
+                    </div>
+
+
+                    <div class="max-w-md">
+
+                        {{ form.profile_photo }}
+
+                        {% if form.profile_photo.errors %}
+                            <p class="mt-1 text-sm text-error">
+                                {{ form.profile_photo.errors.0 }}
+                            </p>
+                        {% endif %}
+
+                    </div>
+
+                </section>
+
+
+                <div class="divider"></div>
+
+
+                <!-- Address -->
+                <section>
+
+                    <div class="mb-5">
+
+                        <h2 class="text-lg font-semibold">
+                            Address
+                        </h2>
+
+                    </div>
+
+
+                    <div class="form-control">
+
+                        <label class="label">
+                            <span class="label-text font-medium">
+                                Address
+                            </span>
+                        </label>
+
+                        {{ form.address }}
+
+                        {% if form.address.errors %}
+                            <p class="mt-1 text-sm text-error">
+                                {{ form.address.errors.0 }}
+                            </p>
+                        {% endif %}
+
+                    </div>
+
+                </section>
+
+
+                <div class="divider"></div>
+
+
+                <!-- Emergency Contact -->
+                <section>
+
+                    <div class="mb-5">
+
+                        <h2 class="text-lg font-semibold">
+                            Emergency Contact
+                        </h2>
+
+                        <p class="text-sm text-base-content/60">
+                            Provide someone the gym can contact in an emergency.
+                        </p>
+
+                    </div>
+
+
+                    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+                        <!-- Emergency Name -->
+                        <div class="form-control">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Contact Name
+                                </span>
+                            </label>
+
+                            {{ form.emergency_contact_name }}
+
+                        </div>
+
+
+                        <!-- Emergency Phone -->
+                        <div class="form-control">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Contact Phone
+                                </span>
+                            </label>
+
+                            {{ form.emergency_contact_phone }}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <div class="divider"></div>
+
+
+                <!-- Status -->
+                <section>
+
+                    <div class="mb-5">
+
+                        <h2 class="text-lg font-semibold">
+                            Membership Status
+                        </h2>
+
+                    </div>
+
+
+                    <div class="max-w-md">
+
+                        <label class="label">
+                            <span class="label-text font-medium">
+                                Member Status
+                            </span>
+                        </label>
+
+                        {{ form.status }}
+
+                    </div>
+
+                </section>
+
+
+                <!-- Buttons -->
+                <div class="flex flex-col-reverse gap-3 border-t border-base-300 pt-6 sm:flex-row sm:justify-end">
+
+                    <a
+                        href="{% url 'members:list' %}"
+                        class="btn btn-ghost">
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        <span>💾</span>
+
+                        Save Member
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

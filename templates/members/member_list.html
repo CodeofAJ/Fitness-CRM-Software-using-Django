@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block title %}
+Members | GMS
+{% endblock %}
+
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- Page Header -->
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+        <div>
+            <h1 class="text-2xl font-bold">
+                Members
+            </h1>
+
+            <p class="mt-1 text-sm text-base-content/60">
+                Manage your gym members.
+            </p>
+        </div>
+
+        <a href="{% url 'members:create' %}" class="btn btn-primary">
+
+            <span>➕</span>
+
+            Add Member
+
+        </a>
+
+    </div>
+
+
+    <!-- Search & Filter -->
+    <div class="card border border-base-300 bg-base-100 shadow-sm">
+
+        <div class="card-body">
+
+            <form method="GET" class="flex flex-col gap-3 lg:flex-row">
+
+                <!-- Search -->
+                <div class="flex-1">
+
+                    <label class="input input-bordered flex items-center gap-2 w-full">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m21 21-4.35-4.35m2.35-5.65a8 8 0 11-16 0 8 8 0 0116 0z" />
+
+                        </svg>
+
+                        <input type="text" name="search" value="{{ search }}"
+                            placeholder="Search by name, member ID, phone or email" class="grow" />
+
+                    </label>
+
+                </div>
+
+
+                <!-- Status -->
+                <select name="status" class="select select-bordered w-full lg:w-52">
+
+                    <option value="">
+                        All Members
+                    </option>
+
+                    <option value="ACTIVE" {% if status == "ACTIVE" %}selected{% endif %}>
+                        Active
+                    </option>
+
+                    <option value="INACTIVE" {% if status == "INACTIVE" %}selected{% endif %}>
+                        Inactive
+                    </option>
+
+                </select>
+
+
+                <!-- Search Button -->
+                <button type="submit" class="btn btn-primary">
+
+                    Search
+
+                </button>
+
+
+                {% if search or status %}
+
+                <a href="{% url 'members:list' %}" class="btn btn-ghost">
+
+                    Clear
+
+                </a>
+
+                {% endif %}
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Members Table -->
+    <div class="card border border-base-300 bg-base-100 shadow-sm">
+
+        <div class="card-body p-0">
+
+            <div class="overflow-x-auto">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Member
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Gender
+                            </th>
+
+                            <th>
+                                Join Date
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for member in page_obj %}
+
+                        <tr>
+
+                            <!-- Member -->
+                            <td>
+
+                                <div class="flex items-center gap-3">
+
+                                    <div class="avatar placeholder">
+
+                                        <div class="w-10 rounded-full bg-primary text-primary-content">
+
+                                            <span>
+                                                {{ member.full_name|first|upper }}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <div class="font-semibold">
+                                            {{ member.full_name }}
+                                        </div>
+
+                                        <div class="text-sm text-base-content/60">
+                                            {{ member.member_id }}
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- Phone -->
+                            <td>
+                                {{ member.phone }}
+                            </td>
+
+
+                            <!-- Gender -->
+                            <td>
+                                {{ member.get_gender_display }}
+                            </td>
+
+
+                            <!-- Join Date -->
+                            <td>
+                                {{ member.join_date|date:"d M Y" }}
+                            </td>
+
+
+                            <!-- Status -->
+                            <td>
+
+                                {% if member.status == "ACTIVE" %}
+
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge badge-ghost">
+                                    Inactive
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Actions -->
+                            <td>
+
+                                <div class="flex gap-1">
+
+                                    <!-- View -->
+                                    <a href="{% url 'members:detail' member.member_id %}"
+                                        class="btn btn-ghost btn-sm text-primary" title="View">
+
+                                        👁️
+
+                                    </a>
+
+
+                                    <!-- Edit -->
+                                    <a href="{% url 'members:update' member.member_id %}"
+                                        class="btn btn-ghost btn-sm text-primary" title="Edit">
+
+                                        ✏️
+
+                                    </a>
+
+
+                                    <!-- Activate / Deactivate -->
+                                    <form method="POST" action="{% url 'members:toggle_status' member.member_id %}">
+
+                                        {% csrf_token %}
+
+                                        {% if member.status == "ACTIVE" %}
+
+                                        <button type="submit" class="btn btn-ghost btn-sm" title="Deactivate">
+
+                                            🔒
+
+                                        </button>
+
+                                        {% else %}
+
+                                        <button type="submit" class="btn btn-ghost btn-sm text-primary"
+                                            title="Activate">
+
+                                            🔓
+
+                                        </button>
+
+                                        {% endif %}
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="6" class="py-16 text-center">
+
+                                <div class="flex flex-col items-center">
+
+                                    <div class="mb-4 text-5xl">
+                                        👥
+                                    </div>
+
+                                    <h3 class="text-lg font-semibold">
+                                        No members found
+                                    </h3>
+
+                                    <p class="mt-1 text-sm text-base-content/60">
+                                        Add your first gym member to get started.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+                {% if page_obj.has_other_pages %}
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+
+                    <div class="text-sm text-base-content/60">
+                        Showing
+                        <span class="font-medium">
+                            {{ page_obj.start_index }}
+                        </span>
+                        -
+                        <span class="font-medium">
+                            {{ page_obj.end_index }}
+                        </span>
+                        of
+                        <span class="font-medium">
+                            {{ page_obj.paginator.count }}
+                        </span>
+                        members
+                    </div>
+
+                    <div class="join">
+
+                        {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search|urlencode }}{% endif %}{% if status %}&status={{ status }}{% endif %}"
+                            class="join-item btn btn-sm">
+                            «
+                        </a>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+
+                        {% if page_obj.number == num %}
+
+                        <span class="join-item btn btn-sm btn-primary">
+                            {{ num }}
+                        </span>
+
+                        {% else %}
+
+                        <a href="?page={{ num }}{% if search %}&search={{ search|urlencode }}{% endif %}{% if status %}&status={{ status }}{% endif %}"
+                            class="join-item btn btn-sm">
+                            {{ num }}
+                        </a>
+
+                        {% endif %}
+
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search|urlencode }}{% endif %}{% if status %}&status={{ status }}{% endif %}"
+                            class="join-item btn btn-sm">
+                            »
+                        </a>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

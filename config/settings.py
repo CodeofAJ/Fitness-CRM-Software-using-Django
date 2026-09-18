@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'payments',
     'trainers',
     'reports',
+
+    # third part app
+    # 'Pillow',
 ]
 
 MIDDLEWARE = [
