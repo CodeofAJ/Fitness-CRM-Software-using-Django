@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto space-y-6">
+
+    <!-- Header -->
+    <div>
+
+        <div class="breadcrumbs text-sm mb-2">
+
+            <ul>
+
+                <li>
+                    <a href="{% url 'memberships:plan_list' %}">
+                        Membership Plans
+                    </a>
+                </li>
+
+                <li>
+                    {% if plan %}
+                        Edit Plan
+                    {% else %}
+                        Add Plan
+                    {% endif %}
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <h1 class="text-2xl font-bold">
+
+            {% if plan %}
+                Edit Membership Plan
+            {% else %}
+                Add Membership Plan
+            {% endif %}
+
+        </h1>
+
+        <p class="text-base-content/60 mt-1">
+            Configure membership duration, pricing and availability.
+        </p>
+
+    </div>
+
+
+    <!-- Form -->
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body">
+
+            <form
+                method="POST"
+                class="space-y-6"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- Errors -->
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-error">
+
+                        <span>
+                            {{ form.non_field_errors }}
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Name -->
+                <div>
+
+                    <label class="label">
+                        <span class="label-text font-medium">
+                            Plan Name
+                        </span>
+                    </label>
+
+                    {{ form.name }}
+
+                    {% if form.name.errors %}
+                        <div class="text-error text-sm mt-1">
+                            {{ form.name.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Duration + Price -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <div>
+
+                        <label class="label">
+                            <span class="label-text font-medium">
+                                Duration
+                            </span>
+                        </label>
+
+                        {{ form.duration_months }}
+
+                        {% if form.duration_months.errors %}
+                            <div class="text-error text-sm mt-1">
+                                {{ form.duration_months.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="label">
+                            <span class="label-text font-medium">
+                                Price (₹)
+                            </span>
+                        </label>
+
+                        {{ form.price }}
+
+                        {% if form.price.errors %}
+                            <div class="text-error text-sm mt-1">
+                                {{ form.price.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Description -->
+                <div>
+
+                    <label class="label">
+                        <span class="label-text font-medium">
+                            Description
+                        </span>
+                    </label>
+
+                    {{ form.description }}
+
+                    {% if form.description.errors %}
+                        <div class="text-error text-sm mt-1">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Active -->
+                <div class="flex items-center gap-3">
+
+                    {{ form.is_active }}
+
+                    <div>
+
+                        <label class="font-medium">
+                            Active Plan
+                        </label>
+
+                        <p class="text-sm text-base-content/60">
+                            Allow this plan to be assigned to new memberships.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Buttons -->
+                <div class="flex justify-end gap-3 pt-4 border-t border-base-300">
+
+                    <a
+                        href="{% url 'memberships:plan_list' %}"
+                        class="btn btn-ghost"
+                    >
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        {% if plan %}
+                            Update Plan
+                        {% else %}
+                            Save Plan
+                        {% endif %}
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

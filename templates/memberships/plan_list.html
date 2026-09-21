@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
+        <div>
+            <h1 class="text-2xl font-bold">
+                Membership Plans
+            </h1>
+
+            <p class="text-base-content/60 mt-1">
+                Manage gym membership plans and pricing.
+            </p>
+        </div>
+
+        <a
+            href="{% url 'memberships:plan_create' %}"
+            class="btn btn-primary"
+        >
+            <span>＋</span>
+            Add Plan
+        </a>
+
+    </div>
+
+
+    <!-- Filters -->
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body">
+
+            <form method="GET">
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+
+                    <!-- Search -->
+                    <div class="md:col-span-6">
+
+                        <label class="label">
+                            <span class="label-text font-medium">
+                                Search Plans
+                            </span>
+                        </label>
+
+                        <div class="relative">
+
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ search }}"
+                                placeholder="Search by plan name or description..."
+                                class="input input-bordered w-full pl-10"
+                            >
+
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-primary">
+                                🔎
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Status -->
+                    <div class="md:col-span-3">
+
+                        <label class="label">
+                            <span class="label-text font-medium">
+                                Status
+                            </span>
+                        </label>
+
+                        <select
+                            name="status"
+                            class="select select-bordered w-full"
+                        >
+
+                            <option value="">
+                                All Plans
+                            </option>
+
+                            <option
+                                value="ACTIVE"
+                                {% if status == "ACTIVE" %}selected{% endif %}
+                            >
+                                Active
+                            </option>
+
+                            <option
+                                value="INACTIVE"
+                                {% if status == "INACTIVE" %}selected{% endif %}
+                            >
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+                    <div class="md:col-span-3 flex gap-2">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary flex-1"
+                        >
+                            🔎 Search
+                        </button>
+
+                        <a
+                            href="{% url 'memberships:plan_list' %}"
+                            class="btn btn-ghost border border-base-300"
+                        >
+                            Clear
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Plans -->
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body p-0">
+
+            <div class="overflow-x-auto">
+
+                <table class="table">
+
+                    <thead>
+                        <tr>
+
+                            <th>Plan</th>
+                            <th>Duration</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th class="text-right">Actions</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for plan in plans %}
+
+                            <tr>
+
+                                <!-- Plan -->
+                                <td>
+
+                                    <div class="font-semibold">
+                                        {{ plan.name }}
+                                    </div>
+
+                                    {% if plan.description %}
+                                        <div class="text-sm text-base-content/60 max-w-md">
+                                            {{ plan.description }}
+                                        </div>
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Duration -->
+                                <td>
+
+                                    {{ plan.get_duration_months_display }}
+
+                                </td>
+
+
+                                <!-- Price -->
+                                <td>
+
+                                    <span class="font-semibold">
+                                        ₹{{ plan.price }}
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Status -->
+                                <td>
+
+                                    {% if plan.is_active %}
+
+                                        <span class="badge badge-success gap-1">
+                                            ● Active
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge badge-error gap-1">
+                                            ● Inactive
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Actions -->
+                                <td>
+
+                                    <div class="flex justify-end gap-1">
+
+                                        <!-- Edit -->
+                                        <a
+                                            href="{% url 'memberships:plan_update' plan.pk %}"
+                                            class="btn btn-ghost btn-sm text-primary"
+                                            title="Edit"
+                                        >
+                                            ✏️
+                                        </a>
+
+
+                                        <!-- Toggle -->
+                                        <form
+                                            method="POST"
+                                            action="{% url 'memberships:plan_toggle_status' plan.pk %}"
+                                        >
+
+                                            {% csrf_token %}
+
+                                            {% if plan.is_active %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-ghost btn-sm"
+                                                    title="Deactivate"
+                                                >
+                                                    🔒
+                                                </button>
+
+                                            {% else %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-ghost btn-sm text-primary"
+                                                    title="Activate"
+                                                >
+                                                    🔓
+                                                </button>
+
+                                            {% endif %}
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td colspan="5">
+
+                                    <div class="text-center py-12">
+
+                                        <div class="text-4xl mb-3">
+                                            📋
+                                        </div>
+
+                                        <h3 class="font-semibold text-lg">
+                                            No membership plans found
+                                        </h3>
+
+                                        <p class="text-base-content/60 mt-1">
+                                            Create your first membership plan.
+                                        </p>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

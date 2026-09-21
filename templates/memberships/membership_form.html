@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto space-y-6">
+
+    <!-- Header -->
+    <div>
+
+        <div class="breadcrumbs text-sm mb-2">
+
+            <ul>
+
+                <li>
+                    <a href="{% url 'memberships:membership_list' %}">
+                        Memberships
+                    </a>
+                </li>
+
+                <li>
+                    Assign Membership
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <h1 class="text-2xl font-bold">
+            Assign Membership
+        </h1>
+
+        <p class="text-base-content/60 mt-1">
+            Assign a membership plan to an active member.
+        </p>
+
+    </div>
+
+
+    <!-- Form -->
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body">
+
+            <form method="POST" class="space-y-6">
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-error">
+
+                        <span>
+                            {{ form.non_field_errors }}
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Member -->
+                <div>
+
+                    <label class="label">
+                        <span class="label-text font-medium">
+                            Member
+                        </span>
+                    </label>
+
+                    {{ form.member }}
+
+                    {% if form.member.errors %}
+
+                        <div class="text-error text-sm mt-1">
+                            {{ form.member.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Plan -->
+                <div>
+
+                    <label class="label">
+                        <span class="label-text font-medium">
+                            Membership Plan
+                        </span>
+                    </label>
+
+                    {{ form.plan }}
+
+                    {% if form.plan.errors %}
+
+                        <div class="text-error text-sm mt-1">
+                            {{ form.plan.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Start Date -->
+                <div>
+
+                    <label class="label">
+                        <span class="label-text font-medium">
+                            Start Date
+                        </span>
+                    </label>
+
+                    {{ form.start_date }}
+
+                    <p class="text-sm text-base-content/60 mt-1">
+                        The membership expiry date will be calculated automatically.
+                    </p>
+
+                    {% if form.start_date.errors %}
+
+                        <div class="text-error text-sm mt-1">
+                            {{ form.start_date.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Notes -->
+                <div>
+
+                    <label class="label">
+                        <span class="label-text font-medium">
+                            Notes
+                        </span>
+                    </label>
+
+                    {{ form.notes }}
+
+                    {% if form.notes.errors %}
+
+                        <div class="text-error text-sm mt-1">
+                            {{ form.notes.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Info -->
+                <div class="alert alert-info">
+
+                    <span>
+                        ℹ️ The membership will be created as
+                        <strong>Active</strong>.
+                    </span>
+
+                </div>
+
+
+                <!-- Buttons -->
+                <div class="flex justify-end gap-3 pt-4 border-t border-base-300">
+
+                    <a
+                        href="{% url 'memberships:membership_list' %}"
+                        class="btn btn-ghost"
+                    >
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Assign Membership
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
