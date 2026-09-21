@@ -1,11 +1,12 @@
-from datetime import date
+from datetime import date, timedelta
 from calendar import monthrange
-
+from members.models import Member
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
 from .forms import MembershipForm, MembershipPlanForm
 from .models import Membership, MembershipPlan
@@ -121,8 +122,18 @@ def plan_toggle_status(request, pk):
     return redirect("memberships:plan_list")
 
 
+def update_expired_memberships():
+    today = timezone.localdate()
+
+    Membership.objects.filter(status="ACTIVE", end_date__lt=today).update(
+        status="EXPIRED"
+    )
+
+
 @login_required
 def membership_list(request):
+
+    update_expired_memberships()
 
     search = request.GET.get("search", "").strip()
     status = request.GET.get("status", "").strip()
@@ -162,6 +173,46 @@ def calculate_end_date(start_date, duration_months):
     return date(year, month, day)
 
 
+# @login_required
+# def membership_create(request):
+
+#     if request.method == "POST":
+
+#         form = MembershipForm(request.POST)
+
+#         if form.is_valid():
+
+#             membership = form.save(commit=False)
+
+#             membership.status = "ACTIVE"
+
+#             membership.end_date = calculate_end_date(
+#                 membership.start_date, membership.plan.duration_months
+#             )
+
+#             from datetime import timedelta
+
+#             membership.end_date -= timedelta(days=1)
+
+#             membership.save()
+
+#             messages.success(request, "Membership assigned successfully.")
+
+#             return redirect("memberships:membership_detail", pk=membership.pk)
+
+#     else:
+
+#         form = MembershipForm()
+
+#     return render(
+#         request,
+#         "memberships/membership_form.html",
+#         {
+#             "form": form,
+#         },
+#     )
+
+
 @login_required
 def membership_create(request):
 
@@ -173,13 +224,42 @@ def membership_create(request):
 
             membership = form.save(commit=False)
 
+            # Check whether the member already has
+            # an active membership.
+            active_membership = (
+                Membership.objects.filter(
+                    member=membership.member,
+                    status="ACTIVE",
+                    end_date__gte=membership.start_date,
+                )
+                .order_by("-end_date")
+                .first()
+            )
+
+            if active_membership:
+
+                messages.error(
+                    request,
+                    (
+                        f"This member already has an active "
+                        f"membership until "
+                        f"{active_membership.end_date:%d %b %Y}."
+                    ),
+                )
+
+                return render(
+                    request,
+                    "memberships/membership_form.html",
+                    {
+                        "form": form,
+                    },
+                )
+
             membership.status = "ACTIVE"
 
             membership.end_date = calculate_end_date(
                 membership.start_date, membership.plan.duration_months
             )
-
-            from datetime import timedelta
 
             membership.end_date -= timedelta(days=1)
 
@@ -205,6 +285,8 @@ def membership_create(request):
 @login_required
 def membership_detail(request, pk):
 
+    update_expired_memberships()
+
     membership = get_object_or_404(
         Membership.objects.select_related("member", "plan"), pk=pk
     )
@@ -214,5 +296,65 @@ def membership_detail(request, pk):
         "memberships/membership_detail.html",
         {
             "membership": membership,
+        },
+    )
+
+
+@login_required
+def membership_renew(request, pk):
+
+    membership = get_object_or_404(
+        Membership.objects.select_related("member", "plan"), pk=pk
+    )
+
+    # Update expired status before renewal
+    if membership.status == "ACTIVE" and membership.end_date < timezone.localdate():
+        membership.status = "EXPIRED"
+        membership.save(update_fields=["status", "updated_at"])
+
+    # Only ACTIVE or EXPIRED memberships can be renewed
+    if membership.status not in ["ACTIVE", "EXPIRED"]:
+        messages.error(request, "Only active or expired memberships can be renewed.")
+
+        return redirect("memberships:membership_detail", pk=membership.pk)
+
+    existing_active_membership = (
+        Membership.objects.filter(
+            member=membership.member,
+            status="ACTIVE",
+        )
+        .exclude(pk=membership.pk)
+        .order_by("-end_date")
+        .first()
+    )
+
+
+    if existing_active_membership:
+
+        messages.error(
+            request,
+            ("This member already has an active " "membership. Renewal is not allowed."),
+        )
+
+        return redirect("memberships:membership_detail", pk=membership.pk)
+
+
+@login_required
+def membership_history(request, member_id):
+
+    member = get_object_or_404(Member, member_id=member_id)
+
+    memberships = (
+        Membership.objects.select_related("plan")
+        .filter(member=member)
+        .order_by("-start_date", "-created_at")
+    )
+
+    return render(
+        request,
+        "memberships/membership_history.html",
+        {
+            "member": member,
+            "memberships": memberships,
         },
     )

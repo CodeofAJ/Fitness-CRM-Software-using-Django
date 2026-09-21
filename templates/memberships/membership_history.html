@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- Breadcrumbs -->
+    <div class="text-sm breadcrumbs">
+        <ul>
+            <li>
+                <a href="{% url 'memberships:membership_list' %}">
+                    Memberships
+                </a>
+            </li>
+            <li>
+                Membership History
+            </li>
+        </ul>
+    </div>
+
+
+    <!-- Header -->
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
+        <div>
+            <h1 class="text-3xl font-bold">
+                Membership History
+            </h1>
+
+            <p class="mt-1 text-base-content/60">
+                Complete membership history for {{ member.full_name }}.
+            </p>
+        </div>
+
+        <div class="flex gap-2">
+
+            <a
+                href="{% url 'members:detail' member.member_id %}"
+                class="btn btn-outline"
+            >
+                <span class="text-primary">👤</span>
+                View Member
+            </a>
+
+            <a
+                href="{% url 'memberships:membership_list' %}"
+                class="btn btn-outline"
+            >
+                Back to Memberships
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Member Information -->
+    <div class="card bg-base-100 shadow">
+
+        <div class="card-body">
+
+            <div class="flex flex-col gap-4 md:flex-row md:items-center">
+
+                <div class="flex-1">
+
+                    <p class="text-sm text-base-content/60">
+                        Member
+                    </p>
+
+                    <h2 class="text-xl font-bold">
+                        {{ member.full_name }}
+                    </h2>
+
+                </div>
+
+                <div class="flex-1">
+
+                    <p class="text-sm text-base-content/60">
+                        Member ID
+                    </p>
+
+                    <p class="font-semibold">
+                        {{ member.member_id }}
+                    </p>
+
+                </div>
+
+                <div class="flex-1">
+
+                    <p class="text-sm text-base-content/60">
+                        Phone
+                    </p>
+
+                    <p class="font-semibold">
+                        {{ member.phone }}
+                    </p>
+
+                </div>
+
+                <div class="flex-1">
+
+                    <p class="text-sm text-base-content/60">
+                        Total Memberships
+                    </p>
+
+                    <p class="text-xl font-bold text-primary">
+                        {{ memberships|length }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Membership History -->
+    <div class="card bg-base-100 shadow">
+
+        <div class="card-body">
+
+            <div class="flex items-center justify-between mb-4">
+
+                <div>
+                    <h2 class="card-title">
+                        Membership Records
+                    </h2>
+
+                    <p class="text-sm text-base-content/60">
+                        All memberships associated with this member.
+                    </p>
+                </div>
+
+            </div>
+
+
+            {% if memberships %}
+
+                <div class="overflow-x-auto">
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Plan</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for membership in memberships %}
+
+                                <tr>
+
+                                    <td>
+
+                                        <div class="font-semibold">
+                                            {{ membership.plan.name }}
+                                        </div>
+
+                                        <div class="text-xs text-base-content/60">
+                                            {{ membership.plan.duration_months }} month{{ membership.plan.duration_months|pluralize }}
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        {{ membership.start_date|date:"d M Y" }}
+                                    </td>
+
+
+                                    <td>
+                                        {{ membership.end_date|date:"d M Y" }}
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if membership.status == "ACTIVE" %}
+
+                                            <span class="badge badge-success">
+                                                Active
+                                            </span>
+
+                                        {% elif membership.status == "EXPIRED" %}
+
+                                            <span class="badge badge-warning">
+                                                Expired
+                                            </span>
+
+                                        {% elif membership.status == "CANCELLED" %}
+
+                                            <span class="badge badge-error">
+                                                Cancelled
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge badge-info">
+                                                Pending
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+                                        {{ membership.created_at|date:"d M Y" }}
+                                    </td>
+
+
+                                    <td>
+
+                                        <a
+                                            href="{% url 'memberships:membership_detail' membership.pk %}"
+                                            class="btn btn-sm btn-ghost"
+                                        >
+                                            View
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="py-12 text-center">
+
+                    <div class="text-5xl mb-4">
+                        📋
+                    </div>
+
+                    <h3 class="text-xl font-semibold">
+                        No Membership History
+                    </h3>
+
+                    <p class="mt-2 text-base-content/60">
+                        This member does not have any membership records yet.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

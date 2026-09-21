@@ -34,12 +34,19 @@
         </div>
 
 
-        <a
-            href="{% url 'members:detail' membership.member.member_id %}"
-            class="btn btn-ghost border border-base-300"
-        >
-            View Member
-        </a>
+        <form method="post" action="{% url 'memberships:membership_renew' membership.pk %}" class="inline">
+            {% csrf_token %}
+
+            <button type="submit" class="btn btn-primary"
+                onclick="return confirm('Are you sure you want to renew this membership?');">
+                <span>🔄</span>
+                Renew Membership
+            </button>
+            <a href="{% url 'memberships:membership_history' membership.member.member_id %}" class="btn btn-outline">
+                <span class="text-primary">📋</span>
+                Membership History
+            </a>
+        </form>
 
     </div>
 
@@ -105,27 +112,27 @@
 
                     {% if membership.status == "ACTIVE" %}
 
-                        <span class="badge badge-success badge-lg">
-                            Active
-                        </span>
+                    <span class="badge badge-success badge-lg">
+                        Active
+                    </span>
 
                     {% elif membership.status == "EXPIRED" %}
 
-                        <span class="badge badge-error badge-lg">
-                            Expired
-                        </span>
+                    <span class="badge badge-error badge-lg">
+                        Expired
+                    </span>
 
                     {% elif membership.status == "CANCELLED" %}
 
-                        <span class="badge badge-warning badge-lg">
-                            Cancelled
-                        </span>
+                    <span class="badge badge-warning badge-lg">
+                        Cancelled
+                    </span>
 
                     {% else %}
 
-                        <span class="badge badge-info badge-lg">
-                            Pending
-                        </span>
+                    <span class="badge badge-info badge-lg">
+                        Pending
+                    </span>
 
                     {% endif %}
 
@@ -184,21 +191,21 @@
     <!-- Notes -->
     {% if membership.notes %}
 
-        <div class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
 
-            <div class="card-body">
+        <div class="card-body">
 
-                <h2 class="card-title">
-                    Notes
-                </h2>
+            <h2 class="card-title">
+                Notes
+            </h2>
 
-                <p class="text-base-content/70 whitespace-pre-line">
-                    {{ membership.notes }}
-                </p>
-
-            </div>
+            <p class="text-base-content/70 whitespace-pre-line">
+                {{ membership.notes }}
+            </p>
 
         </div>
+
+    </div>
 
     {% endif %}
 
@@ -248,10 +255,7 @@
 
     <div>
 
-        <a
-            href="{% url 'memberships:membership_list' %}"
-            class="btn btn-ghost"
-        >
+        <a href="{% url 'memberships:membership_list' %}" class="btn btn-ghost">
             ← Back to Memberships
         </a>
 
