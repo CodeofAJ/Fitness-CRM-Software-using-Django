@@ -1,0 +1,419 @@
+{% extends "base.html" %}
+
+{% block title %}
+Attendance
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- Header -->
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+        <div>
+
+            <h1 class="text-3xl font-bold">
+                Attendance
+            </h1>
+
+            <p class="text-base-content/60 mt-1">
+                Manage today's gym attendance.
+            </p>
+
+        </div>
+
+        <a href="{% url 'attendance:check_in' %}" class="btn btn-primary">
+            🟢 Check In Member
+        </a>
+
+    </div>
+
+
+    <!-- Statistics -->
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <div class="card bg-base-100 shadow">
+
+            <div class="card-body">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Today's Attendance
+                        </p>
+
+                        <p class="text-3xl font-bold mt-1">
+                            {{ total_attendance }}
+                        </p>
+
+                    </div>
+
+                    <div class="text-3xl text-primary">
+                        👥
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Attendance Statistics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+
+            <!-- Attendance Rate -->
+            <div class="card bg-base-100 shadow">
+
+                <div class="card-body">
+
+                    <div class="flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-sm text-base-content/60">
+                                Today's Attendance Rate
+                            </p>
+
+                            <p class="text-3xl font-bold mt-1">
+                                {{ attendance_rate }}%
+                            </p>
+
+                        </div>
+
+                        <div class="text-3xl text-primary">
+                            📊
+                        </div>
+
+                    </div>
+
+                    <div class="mt-4">
+
+                        <progress class="progress progress-primary w-full" value="{{ attendance_rate }}"
+                            max="100"></progress>
+
+                    </div>
+
+                    <p class="text-sm text-base-content/60 mt-2">
+                        {{ total_attendance }} of {{ active_members }} active members
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Weekly Attendance -->
+            <div class="card bg-base-100 shadow">
+
+                <div class="card-body">
+
+                    <div class="flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-sm text-base-content/60">
+                                Last 7 Days Attendance
+                            </p>
+
+                            <p class="text-3xl font-bold mt-1">
+                                {{ weekly_attendance }}
+                            </p>
+
+                        </div>
+
+                        <div class="text-3xl text-primary">
+                            📅
+                        </div>
+
+                    </div>
+
+                    <p class="text-sm text-base-content/60 mt-4">
+                        Total attendance records from the last 7 days
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card bg-base-100 shadow">
+
+            <div class="card-body">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Currently Inside
+                        </p>
+
+                        <p class="text-3xl font-bold mt-1">
+                            {{ currently_inside }}
+                        </p>
+
+                    </div>
+
+                    <div class="text-3xl text-success">
+                        🟢
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card bg-base-100 shadow">
+
+            <div class="card-body">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Checked Out
+                        </p>
+
+                        <p class="text-3xl font-bold mt-1">
+                            {{ checked_out }}
+                        </p>
+
+                    </div>
+
+                    <div class="text-3xl text-info">
+                        🚪
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card bg-base-100 shadow">
+
+        <div class="card-body">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-base-content/60">
+                        Not Checked In
+                    </p>
+
+                    <p class="text-3xl font-bold mt-1">
+                        {{ not_checked_in }}
+                    </p>
+
+                </div>
+
+                <div class="text-3xl text-warning">
+                    ⏳
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Attendance table -->
+
+    <div class="card bg-base-100 shadow">
+
+        <div class="card-body">
+
+            <div class="flex items-center justify-between mb-4">
+
+                <div>
+
+                    <h2 class="text-xl font-semibold">
+                        Today's Attendance
+                    </h2>
+
+                    <p class="text-sm text-base-content/60">
+                        {{ today|date:"l, d F Y" }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if attendance_records %}
+
+            <div class="overflow-x-auto">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Member</th>
+                            <th>Member ID</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Status</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for attendance in attendance_records %}
+
+                        <tr>
+
+                            <td>
+
+                                <div class="font-medium">
+                                    {{ attendance.member.full_name }}
+                                </div>
+
+                                <div class="text-sm text-base-content/60">
+                                    {{ attendance.member.phone }}
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                {{ attendance.member.member_id }}
+                            </td>
+
+
+                            <td>
+
+                                {% if attendance.check_in %}
+
+                                {{ attendance.check_in|time:"h:i A" }}
+
+                                {% else %}
+
+                                <span class="text-base-content/40">
+                                    —
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if attendance.check_out %}
+
+                                {{ attendance.check_out|time:"h:i A" }}
+
+                                {% else %}
+
+                                <span class="text-base-content/40">
+                                    —
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if attendance.check_out %}
+
+                                <span class="badge badge-info">
+                                    Checked Out
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge badge-success">
+                                    Inside Gym
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if not attendance.check_out %}
+
+                                <form method="post" action="{% url 'attendance:check_out' attendance.pk %}">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="btn btn-sm btn-outline btn-error">
+                                        🔴 Check Out
+                                    </button>
+
+                                </form>
+
+                                {% else %}
+
+                                <span class="text-sm text-base-content/50">
+                                    Completed
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="text-center py-12">
+
+                <div class="text-5xl mb-4">
+                    👥
+                </div>
+
+                <h3 class="text-lg font-semibold">
+                    No attendance records today
+                </h3>
+
+                <p class="text-base-content/60 mt-1">
+                    Check in a member to get started.
+                </p>
+
+                <a href="{% url 'attendance:check_in' %}" class="btn btn-primary mt-5">
+                    🟢 Check In Member
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ member.full_name }} - Attendance
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- Header -->
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+        <div>
+
+            <div class="flex items-center gap-3">
+
+                <div class="text-3xl text-primary">
+                    📅
+                </div>
+
+                <div>
+
+                    <h1 class="text-3xl font-bold">
+                        Attendance History
+                    </h1>
+
+                    <p class="text-base-content/60 mt-1">
+                        {{ member.full_name }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="flex gap-2">
+
+            <a
+                href="{% url 'attendance:history' %}"
+                class="btn btn-ghost"
+            >
+                ← Attendance History
+            </a>
+
+            <a
+                href="{% url 'members:detail' member.member_id %}"
+                class="btn btn-outline"
+            >
+                View Member
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Member information -->
+
+    <div class="card bg-base-100 shadow">
+
+        <div class="card-body">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                <div>
+
+                    <p class="text-sm text-base-content/60">
+                        Member
+                    </p>
+
+                    <p class="font-semibold">
+                        {{ member.full_name }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <p class="text-sm text-base-content/60">
+                        Member ID
+                    </p>
+
+                    <p class="font-semibold">
+                        {{ member.member_id }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <p class="text-sm text-base-content/60">
+                        Phone
+                    </p>
+
+                    <p class="font-semibold">
+                        {{ member.phone }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Attendance -->
+
+    <div class="card bg-base-100 shadow">
+
+        <div class="card-body">
+
+            <div class="mb-4">
+
+                <h2 class="text-xl font-semibold">
+                    Attendance Records
+                </h2>
+
+                <p class="text-sm text-base-content/60">
+                    {{ page_obj.paginator.count }} record(s)
+                </p>
+
+            </div>
+
+
+            {% if attendance_records %}
+
+                <div class="overflow-x-auto">
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Date</th>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for attendance in attendance_records %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ attendance.date|date:"d M Y" }}
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if attendance.check_in %}
+
+                                            {{ attendance.check_in|time:"h:i A" }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if attendance.check_out %}
+
+                                            {{ attendance.check_out|time:"h:i A" }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if attendance.check_out %}
+
+                                            <span class="badge badge-info">
+                                                Completed
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge badge-success">
+                                                Inside Gym
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- Pagination -->
+
+                {% if page_obj.has_other_pages %}
+
+                    <div class="flex justify-center mt-6">
+
+                        <div class="join">
+
+                            {% if page_obj.has_previous %}
+
+                                <a
+                                    href="?page={{ page_obj.previous_page_number }}"
+                                    class="join-item btn"
+                                >
+                                    «
+                                </a>
+
+                            {% endif %}
+
+
+                            <button class="join-item btn btn-active">
+                                Page {{ page_obj.number }}
+                                of {{ page_obj.paginator.num_pages }}
+                            </button>
+
+
+                            {% if page_obj.has_next %}
+
+                                <a
+                                    href="?page={{ page_obj.next_page_number }}"
+                                    class="join-item btn"
+                                >
+                                    »
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% else %}
+
+                <div class="text-center py-12">
+
+                    <div class="text-5xl mb-4">
+                        📅
+                    </div>
+
+                    <h3 class="text-lg font-semibold">
+                        No attendance records
+                    </h3>
+
+                    <p class="text-base-content/60 mt-1">
+                        This member has no attendance history yet.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

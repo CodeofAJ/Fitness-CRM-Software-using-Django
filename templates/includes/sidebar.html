@@ -63,12 +63,17 @@
 
 
                 <li>
-                    <a href="#">
-                        <span class="text-primary">🕐</span>
+                    <a href="{% url 'attendance:dashboard' %}">
+                        <span class="text-primary">📅</span>
                         Attendance
                     </a>
                 </li>
-
+                <li>
+                    <a href="{% url 'attendance:history' %}">
+                        <span class="text-primary">🕘</span>
+                        Attendance History
+                    </a>
+                </li>
                 <li>
                     <a href="{% url 'payments:list' %}">
                         <span class="text-primary">💳</span>

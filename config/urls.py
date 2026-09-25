@@ -6,12 +6,14 @@ from django.urls import include, path
 from members.views import dashboard
 from memberships.views import *
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", dashboard, name="dashboard"),
     path("members/", include("members.urls")),
     path("memberships/", include("memberships.urls")),
     path("payments/", include("payments.urls")),
+    path("attendance/", include("attendance.urls")),
 ]
 
 

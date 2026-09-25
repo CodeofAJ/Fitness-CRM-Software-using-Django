@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Attendance History
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- Header -->
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+        <div>
+
+            <h1 class="text-3xl font-bold">
+                Attendance History
+            </h1>
+
+            <p class="text-base-content/60 mt-1">
+                View and search previous attendance records.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'attendance:check_in' %}"
+            class="btn btn-primary"
+        >
+            🟢 Check In Member
+        </a>
+
+    </div>
+
+
+    <!-- Filters -->
+
+    <div class="card bg-base-100 shadow">
+
+        <div class="card-body">
+
+            <form
+                method="get"
+                class="grid grid-cols-1 md:grid-cols-3 gap-4"
+            >
+
+                <!-- Search -->
+
+                <div>
+
+                    <label class="label">
+
+                        <span class="label-text font-medium">
+                            Search Member
+                        </span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Name, ID or phone..."
+                        class="input input-bordered w-full"
+                    >
+
+                </div>
+
+
+                <!-- Date -->
+
+                <div>
+
+                    <label class="label">
+
+                        <span class="label-text font-medium">
+                            Date
+                        </span>
+
+                    </label>
+
+                    <input
+                        type="date"
+                        name="date"
+                        value="{{ date }}"
+                        class="input input-bordered w-full"
+                    >
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="flex items-end gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        🔍 Search
+                    </button>
+
+                    <a
+                        href="{% url 'attendance:history' %}"
+                        class="btn btn-ghost"
+                    >
+                        Clear
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Attendance table -->
+
+    <div class="card bg-base-100 shadow">
+
+        <div class="card-body">
+
+            <div class="flex items-center justify-between mb-4">
+
+                <div>
+
+                    <h2 class="text-xl font-semibold">
+                        Records
+                    </h2>
+
+                    <p class="text-sm text-base-content/60">
+                        Showing {{ page_obj.paginator.count }} record(s)
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if attendance_records %}
+
+                <div class="overflow-x-auto">
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Date</th>
+                                <th>Member</th>
+                                <th>Member ID</th>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for attendance in attendance_records %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ attendance.date|date:"d M Y" }}
+                                    </td>
+
+
+                                    <td>
+
+                                        <a
+                                            href="{% url 'attendance:member_history' attendance.member.member_id %}"
+                                            class="font-medium hover:text-primary"
+                                        >
+                                            {{ attendance.member.full_name }}
+                                        </a>
+
+                                        <div class="text-sm text-base-content/60">
+                                            {{ attendance.member.phone }}
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+                                        {{ attendance.member.member_id }}
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if attendance.check_in %}
+
+                                            {{ attendance.check_in|time:"h:i A" }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if attendance.check_out %}
+
+                                            {{ attendance.check_out|time:"h:i A" }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if attendance.check_out %}
+
+                                            <span class="badge badge-info">
+                                                Completed
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge badge-success">
+                                                Inside Gym
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- Pagination -->
+
+                {% if page_obj.has_other_pages %}
+
+                    <div class="flex justify-center mt-6">
+
+                        <div class="join">
+
+                            {% if page_obj.has_previous %}
+
+                                <a
+                                    href="?page={{ page_obj.previous_page_number }}&search={{ search }}&date={{ date }}"
+                                    class="join-item btn"
+                                >
+                                    «
+                                </a>
+
+                            {% endif %}
+
+
+                            <button class="join-item btn btn-active">
+                                Page {{ page_obj.number }}
+                                of {{ page_obj.paginator.num_pages }}
+                            </button>
+
+
+                            {% if page_obj.has_next %}
+
+                                <a
+                                    href="?page={{ page_obj.next_page_number }}&search={{ search }}&date={{ date }}"
+                                    class="join-item btn"
+                                >
+                                    »
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+            {% else %}
+
+                <div class="text-center py-12">
+
+                    <div class="text-5xl mb-4">
+                        📅
+                    </div>
+
+                    <h3 class="text-lg font-semibold">
+                        No attendance records found
+                    </h3>
+
+                    <p class="text-base-content/60 mt-1">
+                        Try changing your search or date filter.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
