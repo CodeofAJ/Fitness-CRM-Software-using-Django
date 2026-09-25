@@ -46,6 +46,9 @@
                 <span class="text-primary">📋</span>
                 Membership History
             </a>
+            <a href="{% url 'payments:razorpay_payment' membership.pk %}" class="btn btn-primary">
+                💳 Pay with Razorpay
+            </a>
         </form>
 
     </div>

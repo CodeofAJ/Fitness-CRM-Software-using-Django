@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+
+{% block title %}
+Payment Details
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-6">
+
+    <div class="breadcrumbs text-sm mb-2">
+
+        <ul>
+
+            <li>
+                <a href="{% url 'dashboard' %}">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'payments:list' %}">
+                    Payments
+                </a>
+            </li>
+
+            <li>
+                Payment Details
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
+        <div>
+
+            <h1 class="text-3xl font-bold">
+                Payment Details
+            </h1>
+
+            <p class="text-base-content/60 mt-1">
+                Payment #{{ payment.pk }}
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'payments:list' %}"
+            class="btn btn-outline"
+        >
+            ← Back to Payments
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- Summary -->
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+
+
+    <!-- Member -->
+
+    <div class="card bg-base-100 shadow-sm border border-base-300">
+
+        <div class="card-body">
+
+            <div class="text-sm text-base-content/60">
+                Member
+            </div>
+
+            <div class="text-xl font-bold">
+                {{ payment.member.full_name }}
+            </div>
+
+            <div class="text-sm text-base-content/60">
+                {{ payment.member.member_id }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Amount -->
+
+    <div class="card bg-base-100 shadow-sm border border-base-300">
+
+        <div class="card-body">
+
+            <div class="text-sm text-base-content/60">
+                Amount
+            </div>
+
+            <div class="text-2xl font-bold text-primary">
+                ₹{{ payment.amount|floatformat:2 }}
+            </div>
+
+            <div class="text-sm text-base-content/60">
+                {{ payment.get_payment_method_display }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Status -->
+
+    <div class="card bg-base-100 shadow-sm border border-base-300">
+
+        <div class="card-body">
+
+            <div class="text-sm text-base-content/60">
+                Status
+            </div>
+
+            {% if payment.status == "SUCCESS" %}
+
+                <div>
+                    <span class="badge badge-success badge-lg">
+                        Success
+                    </span>
+                </div>
+
+            {% elif payment.status == "PENDING" %}
+
+                <div>
+                    <span class="badge badge-warning badge-lg">
+                        Pending
+                    </span>
+                </div>
+
+            {% else %}
+
+                <div>
+                    <span class="badge badge-error badge-lg">
+                        Failed
+                    </span>
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Payment Information -->
+
+<div class="card bg-base-100 shadow-sm border border-base-300 mb-6">
+
+    <div class="card-body">
+
+        <h2 class="card-title mb-4">
+            Payment Information
+        </h2>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+
+            <div>
+
+                <div class="text-sm text-base-content/60">
+                    Payment Method
+                </div>
+
+                <div class="font-semibold">
+                    {{ payment.get_payment_method_display }}
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="text-sm text-base-content/60">
+                    Created
+                </div>
+
+                <div class="font-semibold">
+                    {{ payment.created_at|date:"d M Y, h:i A" }}
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="text-sm text-base-content/60">
+                    Last Updated
+                </div>
+
+                <div class="font-semibold">
+                    {{ payment.updated_at|date:"d M Y, h:i A" }}
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="text-sm text-base-content/60">
+                    Membership
+                </div>
+
+                {% if payment.membership %}
+
+                    <a
+                        href="{% url 'memberships:membership_detail' payment.membership.pk %}"
+                        class="link link-primary font-semibold"
+                    >
+                        {{ payment.membership.plan.name }}
+                    </a>
+
+                {% else %}
+
+                    <span>
+                        —
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Razorpay Information -->
+
+{% if payment.razorpay_order_id or payment.razorpay_payment_id %}
+
+<div class="card bg-base-100 shadow-sm border border-base-300 mb-6">
+
+    <div class="card-body">
+
+        <h2 class="card-title mb-4">
+            Razorpay Information
+        </h2>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+
+            {% if payment.razorpay_order_id %}
+
+            <div>
+
+                <div class="text-sm text-base-content/60">
+                    Razorpay Order ID
+                </div>
+
+                <div class="font-mono text-sm break-all">
+                    {{ payment.razorpay_order_id }}
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            {% if payment.razorpay_payment_id %}
+
+            <div>
+
+                <div class="text-sm text-base-content/60">
+                    Razorpay Payment ID
+                </div>
+
+                <div class="font-mono text-sm break-all">
+                    {{ payment.razorpay_payment_id }}
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- Notes -->
+
+{% if payment.notes %}
+
+<div class="card bg-base-100 shadow-sm border border-base-300 mb-6">
+
+    <div class="card-body">
+
+        <h2 class="card-title">
+            Notes
+        </h2>
+
+        <p class="whitespace-pre-line">
+            {{ payment.notes }}
+        </p>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- Actions -->
+
+<div class="flex flex-wrap gap-3">
+
+    <a
+        href="{% url 'payments:member_history' payment.member.member_id %}"
+        class="btn btn-outline"
+    >
+        <span class="text-primary">
+            📋
+        </span>
+
+        Member Payment History
+    </a>
+
+    <a
+        href="{% url 'members:detail' payment.member.member_id %}"
+        class="btn btn-outline"
+    >
+        <span class="text-primary">
+            👤
+        </span>
+
+        View Member
+    </a>
+
+</div>
+
+{% endblock %}
