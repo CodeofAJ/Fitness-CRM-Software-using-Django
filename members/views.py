@@ -3,15 +3,37 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import redirect, render
+from trainers.models import Trainer
 
 from .forms import MemberForm
 from .models import Member
 
 
 
+@login_required
 def dashboard(request):
-    return render(request, "dashboard/index.html")
 
+    total_trainers = Trainer.objects.count()
+
+    active_trainers = Trainer.objects.filter(
+        status="ACTIVE"
+    ).count()
+
+    inactive_trainers = Trainer.objects.filter(
+        status="INACTIVE"
+    ).count()
+
+    context = {
+        "total_trainers": total_trainers,
+        "active_trainers": active_trainers,
+        "inactive_trainers": inactive_trainers,
+    }
+
+    return render(
+        request,
+        "dashboard/index.html",
+        context
+    )
 
 
 @login_required

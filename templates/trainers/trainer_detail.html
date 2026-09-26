@@ -1,0 +1,472 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="p-6 max-w-6xl mx-auto">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 text-sm text-base-content/60 mb-4">
+
+        <a
+            href="{% url 'trainers:list' %}"
+            class="hover:text-primary"
+        >
+            Trainers
+        </a>
+
+        <span>›</span>
+
+        <span>
+            {{ trainer.trainer_id }}
+        </span>
+
+    </div>
+
+
+    <!-- Profile Header -->
+    <div class="card bg-base-100 shadow mb-6">
+
+        <div class="card-body">
+
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+                <div class="flex items-center gap-5">
+
+                    <!-- Profile Photo -->
+                    <div class="avatar">
+
+                        <div class="w-24 h-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+
+                            {% if trainer.profile_photo %}
+
+                                <img
+                                    src="{{ trainer.profile_photo.url }}"
+                                    alt="{{ trainer.full_name }}"
+                                >
+
+                            {% else %}
+
+                                <div class="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary text-4xl">
+                                    👤
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Basic Information -->
+                    <div>
+
+                        <h1 class="text-3xl font-bold">
+                            {{ trainer.full_name }}
+                        </h1>
+
+                        <p class="text-base-content/60 mt-1">
+                            {{ trainer.trainer_id }}
+                        </p>
+
+                        <div class="mt-3">
+
+                            {% if trainer.status == "ACTIVE" %}
+
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge badge-error">
+                                    Inactive
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Actions -->
+                <div class="flex flex-col sm:flex-row gap-2">
+
+                    <a
+                        href="{% url 'trainers:update' trainer.trainer_id %}"
+                        class="btn btn-primary"
+                    >
+                        ✏️ Edit Trainer
+                    </a>
+
+                    <form
+                        method="post"
+                        action="{% url 'trainers:toggle_status' trainer.trainer_id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        {% if trainer.status == "ACTIVE" %}
+
+                            <button
+                                type="submit"
+                                class="btn btn-outline btn-error w-full"
+                            >
+                                🔴 Deactivate
+                            </button>
+
+                        {% else %}
+
+                            <button
+                                type="submit"
+                                class="btn btn-outline btn-success w-full"
+                            >
+                                🟢 Activate
+                            </button>
+
+                        {% endif %}
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Information Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+
+        <!-- Personal Information -->
+        <div class="card bg-base-100 shadow">
+
+            <div class="card-body">
+
+                <div class="flex items-center gap-2 mb-4">
+
+                    <span class="text-primary text-xl">
+                        👤
+                    </span>
+
+                    <h2 class="text-xl font-semibold">
+                        Personal Information
+                    </h2>
+
+                </div>
+
+
+                <div class="space-y-4">
+
+                    <!-- Gender -->
+                    <div class="flex justify-between gap-4">
+
+                        <span class="text-base-content/60">
+                            Gender
+                        </span>
+
+                        <span class="font-medium text-right">
+                            {{ trainer.get_gender_display }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- Date of Birth -->
+                    <div class="flex justify-between gap-4">
+
+                        <span class="text-base-content/60">
+                            Date of Birth
+                        </span>
+
+                        <span class="font-medium text-right">
+
+                            {% if trainer.date_of_birth %}
+                                {{ trainer.date_of_birth|date:"d M Y" }}
+                            {% else %}
+                                —
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- Joining Date -->
+                    <div class="flex justify-between gap-4">
+
+                        <span class="text-base-content/60">
+                            Joining Date
+                        </span>
+
+                        <span class="font-medium text-right">
+                            {{ trainer.joining_date|date:"d M Y" }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Contact Information -->
+        <div class="card bg-base-100 shadow">
+
+            <div class="card-body">
+
+                <div class="flex items-center gap-2 mb-4">
+
+                    <span class="text-primary text-xl">
+                        📞
+                    </span>
+
+                    <h2 class="text-xl font-semibold">
+                        Contact Information
+                    </h2>
+
+                </div>
+
+
+                <div class="space-y-4">
+
+                    <!-- Phone -->
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Phone
+                        </p>
+
+                        <p class="font-medium mt-1">
+                            {{ trainer.phone }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Email -->
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Email
+                        </p>
+
+                        <p class="font-medium mt-1">
+
+                            {% if trainer.email %}
+                                {{ trainer.email }}
+                            {% else %}
+                                —
+                            {% endif %}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- Address -->
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Address
+                        </p>
+
+                        <p class="font-medium mt-1 whitespace-pre-line">
+
+                            {% if trainer.address %}
+                                {{ trainer.address }}
+                            {% else %}
+                                —
+                            {% endif %}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Professional Information -->
+        <div class="card bg-base-100 shadow lg:col-span-2">
+
+            <div class="card-body">
+
+                <div class="flex items-center gap-2 mb-6">
+
+                    <span class="text-primary text-xl">
+                        🏋️
+                    </span>
+
+                    <h2 class="text-xl font-semibold">
+                        Professional Information
+                    </h2>
+
+                </div>
+
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+
+                    <!-- Specialization -->
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Specialization
+                        </p>
+
+                        <p class="font-semibold text-lg mt-1">
+                            {{ trainer.specialization }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Experience -->
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Experience
+                        </p>
+
+                        <p class="font-semibold text-lg mt-1">
+
+                            {{ trainer.experience_years }}
+
+                            {% if trainer.experience_years == 1 %}
+                                year
+                            {% else %}
+                                years
+                            {% endif %}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- Salary -->
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Monthly Salary
+                        </p>
+
+                        <p class="font-semibold text-lg mt-1">
+
+                            {% if trainer.salary %}
+                                ₹{{ trainer.salary|floatformat:2 }}
+                            {% else %}
+                                —
+                            {% endif %}
+
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- Bio -->
+                {% if trainer.bio %}
+
+                    <div class="divider"></div>
+
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            About the Trainer
+                        </p>
+
+                        <p class="mt-2 leading-relaxed whitespace-pre-line">
+                            {{ trainer.bio }}
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- System Information -->
+        <div class="card bg-base-100 shadow lg:col-span-2">
+
+            <div class="card-body">
+
+                <div class="flex items-center gap-2 mb-4">
+
+                    <span class="text-primary text-xl">
+                        ℹ️
+                    </span>
+
+                    <h2 class="text-xl font-semibold">
+                        Record Information
+                    </h2>
+
+                </div>
+
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+
+                    <div>
+
+                        <span class="text-base-content/60">
+                            Created:
+                        </span>
+
+                        <span class="font-medium ml-1">
+                            {{ trainer.created_at|date:"d M Y, h:i A" }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="text-base-content/60">
+                            Last Updated:
+                        </span>
+
+                        <span class="font-medium ml-1">
+                            {{ trainer.updated_at|date:"d M Y, h:i A" }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Back Button -->
+    <div class="mt-6">
+
+        <a
+            href="{% url 'trainers:list' %}"
+            class="btn btn-outline"
+        >
+            ← Back to Trainers
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,472 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="p-6 max-w-6xl mx-auto">
+
+    <!-- Header -->
+    <div class="mb-6">
+
+        <div class="flex items-center gap-2 text-sm text-base-content/60 mb-2">
+
+            <a
+                href="{% url 'trainers:list' %}"
+                class="hover:text-primary"
+            >
+                Trainers
+            </a>
+
+            <span>›</span>
+
+            <span>
+                {{ page_title }}
+            </span>
+
+        </div>
+
+        <h1 class="text-3xl font-bold">
+            {{ page_title }}
+        </h1>
+
+        <p class="text-base-content/60 mt-1">
+            {% if trainer %}
+                Update trainer information.
+            {% else %}
+                Add a new trainer to the gym.
+            {% endif %}
+        </p>
+
+    </div>
+
+
+    <!-- Form -->
+    <div class="card bg-base-100 shadow">
+
+        <div class="card-body">
+
+            <form
+                method="post"
+                enctype="multipart/form-data"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- Form Errors -->
+                {% if form.non_field_errors %}
+
+                    <div class="alert alert-error mb-6">
+
+                        <span>
+                            {{ form.non_field_errors }}
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Personal Information -->
+                <div class="mb-8">
+
+                    <div class="flex items-center gap-2 mb-4">
+
+                        <span class="text-primary text-xl">
+                            👤
+                        </span>
+
+                        <h2 class="text-xl font-semibold">
+                            Personal Information
+                        </h2>
+
+                    </div>
+
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+
+                        <!-- Trainer ID -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Trainer ID
+                                </span>
+                            </label>
+
+                            {{ form.trainer_id }}
+
+                            {% if form.trainer_id.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.trainer_id.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Full Name -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Full Name
+                                </span>
+                            </label>
+
+                            {{ form.full_name }}
+
+                            {% if form.full_name.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.full_name.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Date of Birth -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Date of Birth
+                                </span>
+                            </label>
+
+                            {{ form.date_of_birth }}
+
+                            {% if form.date_of_birth.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.date_of_birth.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Gender -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Gender
+                                </span>
+                            </label>
+
+                            {{ form.gender }}
+
+                            {% if form.gender.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.gender.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Profile Photo -->
+                        <div class="md:col-span-2">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Profile Photo
+                                </span>
+                            </label>
+
+                            {{ form.profile_photo }}
+
+                            {% if form.profile_photo.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.profile_photo.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                            {% if trainer and trainer.profile_photo %}
+
+                                <div class="mt-3 flex items-center gap-3">
+
+                                    <img
+                                        src="{{ trainer.profile_photo.url }}"
+                                        alt="{{ trainer.full_name }}"
+                                        class="w-16 h-16 rounded-full object-cover"
+                                    >
+
+                                    <span class="text-sm text-base-content/60">
+                                        Current profile photo
+                                    </span>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="divider"></div>
+
+
+                <!-- Contact Information -->
+                <div class="mb-8">
+
+                    <div class="flex items-center gap-2 mb-4">
+
+                        <span class="text-primary text-xl">
+                            📞
+                        </span>
+
+                        <h2 class="text-xl font-semibold">
+                            Contact Information
+                        </h2>
+
+                    </div>
+
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+
+                        <!-- Phone -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Phone
+                                </span>
+                            </label>
+
+                            {{ form.phone }}
+
+                            {% if form.phone.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.phone.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Email -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Email
+                                </span>
+                            </label>
+
+                            {{ form.email }}
+
+                            {% if form.email.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.email.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Address -->
+                        <div class="md:col-span-2">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Address
+                                </span>
+                            </label>
+
+                            {{ form.address }}
+
+                            {% if form.address.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.address.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="divider"></div>
+
+
+                <!-- Professional Information -->
+                <div class="mb-8">
+
+                    <div class="flex items-center gap-2 mb-4">
+
+                        <span class="text-primary text-xl">
+                            🏋️
+                        </span>
+
+                        <h2 class="text-xl font-semibold">
+                            Professional Information
+                        </h2>
+
+                    </div>
+
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+
+                        <!-- Specialization -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Specialization
+                                </span>
+                            </label>
+
+                            {{ form.specialization }}
+
+                            {% if form.specialization.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.specialization.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Experience -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Experience (Years)
+                                </span>
+                            </label>
+
+                            {{ form.experience_years }}
+
+                            {% if form.experience_years.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.experience_years.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Joining Date -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Joining Date
+                                </span>
+                            </label>
+
+                            {{ form.joining_date }}
+
+                            {% if form.joining_date.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.joining_date.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Salary -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Monthly Salary
+                                </span>
+                            </label>
+
+                            {{ form.salary }}
+
+                            {% if form.salary.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.salary.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Status -->
+                        <div>
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Status
+                                </span>
+                            </label>
+
+                            {{ form.status }}
+
+                            {% if form.status.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.status.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Bio -->
+                        <div class="md:col-span-2">
+
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Bio
+                                </span>
+                            </label>
+
+                            {{ form.bio }}
+
+                            {% if form.bio.errors %}
+                                <p class="text-error text-sm mt-1">
+                                    {{ form.bio.errors|striptags }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="divider"></div>
+
+
+                <!-- Buttons -->
+                <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+
+                    <a
+                        href="{% if trainer %}{% url 'trainers:detail' trainer.trainer_id %}{% else %}{% url 'trainers:list' %}{% endif %}"
+                        class="btn btn-outline"
+                    >
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        💾 {{ submit_text }}
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

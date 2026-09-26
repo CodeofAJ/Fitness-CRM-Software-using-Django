@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="p-6">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+        <div>
+
+            <h1 class="text-3xl font-bold">
+                Trainers
+            </h1>
+
+            <p class="text-base-content/60 mt-1">
+                Manage gym trainers and their information.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'trainers:create' %}"
+            class="btn btn-primary"
+        >
+            <span class="text-lg">➕</span>
+            Add Trainer
+        </a>
+
+    </div>
+
+
+    <!-- Search and Filter -->
+    <div class="card bg-base-100 shadow mb-6">
+
+        <div class="card-body">
+
+            <form
+                method="get"
+                class="grid grid-cols-1 md:grid-cols-3 gap-4"
+            >
+
+                <!-- Search -->
+                <div>
+
+                    <label class="label">
+                        <span class="label-text">
+                            Search
+                        </span>
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="ID, name, phone, email..."
+                        class="input input-bordered w-full"
+                    >
+
+                </div>
+
+
+                <!-- Status -->
+                <div>
+
+                    <label class="label">
+                        <span class="label-text">
+                            Status
+                        </span>
+                    </label>
+
+                    <select
+                        name="status"
+                        class="select select-bordered w-full"
+                    >
+
+                        <option value="">
+                            All Statuses
+                        </option>
+
+                        <option
+                            value="ACTIVE"
+                            {% if status == "ACTIVE" %}selected{% endif %}
+                        >
+                            Active
+                        </option>
+
+                        <option
+                            value="INACTIVE"
+                            {% if status == "INACTIVE" %}selected{% endif %}
+                        >
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Buttons -->
+                <div class="flex items-end gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        🔍 Search
+                    </button>
+
+                    <a
+                        href="{% url 'trainers:list' %}"
+                        class="btn btn-outline"
+                    >
+                        Reset
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Trainer Table -->
+    <div class="card bg-base-100 shadow">
+
+        <div class="card-body p-0">
+
+            <div class="overflow-x-auto">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Trainer</th>
+                            <th>Specialization</th>
+                            <th>Experience</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th class="text-right">Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for trainer in trainers %}
+
+                        <tr class="hover">
+
+                            <!-- Trainer -->
+                            <td>
+
+                                <div class="flex items-center gap-3">
+
+                                    <div class="avatar">
+
+                                        <div class="w-12 h-12 rounded-full">
+
+                                            {% if trainer.profile_photo %}
+
+                                                <img
+                                                    src="{{ trainer.profile_photo.url }}"
+                                                    alt="{{ trainer.full_name }}"
+                                                >
+
+                                            {% else %}
+
+                                                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl">
+                                                    👤
+                                                </div>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <a
+                                            href="{% url 'trainers:detail' trainer.trainer_id %}"
+                                            class="font-semibold hover:text-primary"
+                                        >
+                                            {{ trainer.full_name }}
+                                        </a>
+
+                                        <p class="text-sm text-base-content/60">
+                                            {{ trainer.trainer_id }}
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- Specialization -->
+                            <td>
+                                {{ trainer.specialization }}
+                            </td>
+
+
+                            <!-- Experience -->
+                            <td>
+
+                                {{ trainer.experience_years }}
+
+                                {% if trainer.experience_years == 1 %}
+                                    year
+                                {% else %}
+                                    years
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Phone -->
+                            <td>
+                                {{ trainer.phone }}
+                            </td>
+
+
+                            <!-- Status -->
+                            <td>
+
+                                {% if trainer.status == "ACTIVE" %}
+
+                                    <span class="badge badge-success">
+                                        Active
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge badge-error">
+                                        Inactive
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Actions -->
+                            <td>
+
+                                <div class="flex justify-end gap-2">
+
+                                    <a
+                                        href="{% url 'trainers:detail' trainer.trainer_id %}"
+                                        class="btn btn-sm btn-outline"
+                                    >
+                                        View
+                                    </a>
+
+                                    <a
+                                        href="{% url 'trainers:update' trainer.trainer_id %}"
+                                        class="btn btn-sm btn-primary"
+                                    >
+                                        Edit
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="text-center py-12"
+                            >
+
+                                <div class="text-4xl mb-3">
+                                    🏋️
+                                </div>
+
+                                <p class="font-semibold">
+                                    No trainers found
+                                </p>
+
+                                <p class="text-sm text-base-content/60 mt-1">
+                                    Try changing your search or filter.
+                                </p>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Pagination -->
+    {% if page_obj.paginator.num_pages > 1 %}
+
+    <div class="flex justify-center mt-6">
+
+        <div class="join">
+
+            {% if page_obj.has_previous %}
+
+                <a
+                    href="?page={{ page_obj.previous_page_number }}&search={{ search }}&status={{ status }}"
+                    class="join-item btn"
+                >
+                    «
+                </a>
+
+            {% endif %}
+
+
+            <span class="join-item btn btn-disabled">
+                Page {{ page_obj.number }}
+                of {{ page_obj.paginator.num_pages }}
+            </span>
+
+
+            {% if page_obj.has_next %}
+
+                <a
+                    href="?page={{ page_obj.next_page_number }}&search={{ search }}&status={{ status }}"
+                    class="join-item btn"
+                >
+                    »
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
