@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- ===================================================== -->
+    <!-- PAGE HEADER -->
+    <!-- ===================================================== -->
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+        <div>
+            <div class="flex items-center gap-3">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-2xl text-primary">
+                    📊
+                </div>
+
+                <div>
+                    <h1 class="text-2xl font-bold sm:text-3xl">
+                        Reports
+                    </h1>
+
+                    <p class="mt-1 text-sm text-base-content/60">
+                        Analyze and review your gym management data.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- OVERVIEW STATISTICS -->
+    <!-- ===================================================== -->
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+        <!-- Members -->
+
+        <div class="card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+
+            <div class="h-1 bg-primary"></div>
+
+            <div class="card-body p-5">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm font-medium text-base-content/60">
+                            Total Members
+                        </p>
+
+                        <p class="mt-2 text-3xl font-bold">
+                            {{ total_members }}
+                        </p>
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl text-primary">
+                        👥
+                    </div>
+
+                </div>
+
+                <div class="mt-4 flex gap-3 text-xs">
+                    <span class="text-success">
+                        {{ active_members }} Active
+                    </span>
+
+                    <span class="text-base-content/50">
+                        {{ inactive_members }} Inactive
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Memberships -->
+
+        <div class="card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+
+            <div class="h-1 bg-primary"></div>
+
+            <div class="card-body p-5">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm font-medium text-base-content/60">
+                            Total Memberships
+                        </p>
+
+                        <p class="mt-2 text-3xl font-bold">
+                            {{ total_memberships }}
+                        </p>
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl text-primary">
+                        📋
+                    </div>
+
+                </div>
+
+                <div class="mt-4 flex gap-3 text-xs">
+                    <span class="text-success">
+                        {{ active_memberships }} Active
+                    </span>
+
+                    <span class="text-error">
+                        {{ expired_memberships }} Expired
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Attendance -->
+
+        <div class="card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+
+            <div class="h-1 bg-primary"></div>
+
+            <div class="card-body p-5">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm font-medium text-base-content/60">
+                            Attendance Records
+                        </p>
+
+                        <p class="mt-2 text-3xl font-bold">
+                            {{ total_attendance }}
+                        </p>
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl text-primary">
+                        📅
+                    </div>
+
+                </div>
+
+                <p class="mt-4 text-xs text-base-content/50">
+                    Total recorded attendance entries
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Trainers -->
+
+        <div class="card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+
+            <div class="h-1 bg-primary"></div>
+
+            <div class="card-body p-5">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm font-medium text-base-content/60">
+                            Total Trainers
+                        </p>
+
+                        <p class="mt-2 text-3xl font-bold">
+                            {{ total_trainers }}
+                        </p>
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl text-primary">
+                        🏋️
+                    </div>
+
+                </div>
+
+                <div class="mt-4 text-xs text-success">
+                    {{ active_trainers }} Active
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- REPORT CATEGORIES -->
+    <!-- ===================================================== -->
+
+    <div>
+
+        <div class="mb-4">
+            <h2 class="text-xl font-bold">
+                Report Categories
+            </h2>
+
+            <p class="mt-1 text-sm text-base-content/60">
+                Select a category to explore detailed reports.
+            </p>
+        </div>
+
+
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+
+
+            <!-- MEMBER REPORTS -->
+
+            <div class="card border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+
+                <div class="card-body">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl text-primary">
+                        👥
+                    </div>
+
+                    <h3 class="mt-4 text-lg font-bold">
+                        Member Reports
+                    </h3>
+
+                    <p class="text-sm text-base-content/60">
+                        Analyze member counts, active members, inactive members and member activity.
+                    </p>
+
+                    <div class="card-actions mt-4">
+                        <a
+                                href="{% url 'reports:member_report' %}"
+                                class="btn btn-outline w-full border-primary text-primary hover:bg-primary hover:text-primary-content"
+                            >
+                                View Report
+                                <span>→</span>
+                            </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MEMBERSHIP REPORTS -->
+
+            <div class="card border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+
+                <div class="card-body">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl text-primary">
+                        📋
+                    </div>
+
+                    <h3 class="mt-4 text-lg font-bold">
+                        Membership Reports
+                    </h3>
+
+                    <p class="text-sm text-base-content/60">
+                        Review active, expired and upcoming membership information.
+                    </p>
+
+                    <div class="card-actions mt-4">
+                        <button
+                            type="button"
+                            class="btn btn-outline w-full border-primary text-primary hover:bg-primary hover:text-primary-content"
+                        >
+                            Coming Soon
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ATTENDANCE REPORTS -->
+
+            <div class="card border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+
+                <div class="card-body">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl text-primary">
+                        📅
+                    </div>
+
+                    <h3 class="mt-4 text-lg font-bold">
+                        Attendance Reports
+                    </h3>
+
+                    <p class="text-sm text-base-content/60">
+                        Review attendance records, daily activity and attendance trends.
+                    </p>
+
+                    <div class="card-actions mt-4">
+                        <button
+                            type="button"
+                            class="btn btn-outline w-full border-primary text-primary hover:bg-primary hover:text-primary-content"
+                        >
+                            Coming Soon
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TRAINER REPORTS -->
+
+            <div class="card border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+
+                <div class="card-body">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl text-primary">
+                        🏋️
+                    </div>
+
+                    <h3 class="mt-4 text-lg font-bold">
+                        Trainer Reports
+                    </h3>
+
+                    <p class="text-sm text-base-content/60">
+                        Review trainer counts, active trainers and trainer information.
+                    </p>
+
+                    <div class="card-actions mt-4">
+                        <button
+                            type="button"
+                            class="btn btn-outline w-full border-primary text-primary hover:bg-primary hover:text-primary-content"
+                        >
+                            Coming Soon
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
