@@ -1,233 +1,370 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Dashboard | GMS
+Dashboard | GMS
 {% endblock %}
-
 
 {% block content %}
 
 <div class="space-y-6">
 
+    <!-- ========================================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================================= -->
 
-    <!-- Page heading -->
-    <div>
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-        <h1 class="text-2xl font-bold tracking-tight lg:text-3xl">
-            Dashboard
-        </h1>
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight lg:text-3xl">
+                Dashboard
+            </h1>
 
-        <p class="mt-1 text-base-content/60">
-            Welcome back! Here's what's happening at your gym.
-        </p>
+            <p class="mt-1 text-base-content/60">
+                Welcome back! Here's what's happening at your gym.
+            </p>
+        </div>
+
+        <div class="flex gap-2">
+            <a href="{% url 'members:create' %}" class="btn btn-primary">
+                ➕ Add Member
+            </a>
+        </div>
 
     </div>
 
 
-    <!-- Statistics -->
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <!-- ========================================================= -->
+    <!-- STATISTICS CARDS -->
+    <!-- ========================================================= -->
 
+    <!-- ========================================================= -->
+    <!-- STATISTICS CARDS -->
+    <!-- ========================================================= -->
 
-        <!-- Members -->
-        <div class="card bg-base-100 shadow-sm">
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
 
-            <div class="card-body">
+        <!-- TOTAL MEMBERS -->
+        <div
+            class="group card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
 
-                <div class="flex items-center justify-between">
+            <div class="h-1 bg-primary"></div>
+
+            <div class="card-body p-5">
+
+                <div class="flex items-start justify-between">
 
                     <div>
-
                         <p class="text-sm font-medium text-base-content/60">
                             Total Members
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold">
-                            0
+                        <h2 class="mt-2 text-3xl font-bold tracking-tight">
+                            {{ total_members }}
                         </h2>
-
                     </div>
 
-                    <div class="rounded-xl bg-primary/10 p-3 text-2xl">
+                    <div
+                        class="rounded-2xl bg-primary/10 p-3 text-2xl transition-transform duration-300 group-hover:scale-110">
                         👥
                     </div>
 
                 </div>
 
-                <div class="mt-4 flex items-center gap-2">
-
-                    <span class="badge badge-success badge-sm">
-                        Active
+                <div class="mt-5 flex items-center gap-2">
+                    <span class="badge badge-primary badge-sm">
+                        {{ active_members }} Active
                     </span>
 
-                    <span class="text-xs text-base-content/60">
-                        Members registered
+                    <span class="text-xs text-base-content/50">
+                        registered members
                     </span>
-
                 </div>
 
             </div>
-
         </div>
 
 
-        <!-- Active Memberships -->
-        <div class="card bg-base-100 shadow-sm">
+        <!-- ACTIVE MEMBERSHIPS -->
+        <div
+            class="group card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
 
-            <div class="card-body">
+            <div class="h-1 bg-primary"></div>
 
-                <div class="flex items-center justify-between">
+            <div class="card-body p-5">
+
+                <div class="flex items-start justify-between">
 
                     <div>
-
                         <p class="text-sm font-medium text-base-content/60">
                             Active Memberships
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold">
-                            0
+                        <h2 class="mt-2 text-3xl font-bold tracking-tight">
+                            {{ active_memberships }}
                         </h2>
-
                     </div>
 
-                    <div class="rounded-xl bg-success/10 p-3 text-2xl">
+                    <div
+                        class="rounded-2xl bg-primary/10 p-3 text-2xl transition-transform duration-300 group-hover:scale-110">
                         💳
                     </div>
 
                 </div>
 
-                <div class="mt-4">
-
-                    <span class="text-xs text-base-content/60">
+                <div class="mt-5">
+                    <span class="text-xs text-base-content/50">
                         Currently active plans
                     </span>
-
                 </div>
 
             </div>
-
         </div>
 
 
-        <!-- Expired -->
-        <div class="card bg-base-100 shadow-sm">
+        <!-- EXPIRED MEMBERSHIPS -->
+        <div
+            class="group card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
 
-            <div class="card-body">
+            <div class="h-1 bg-primary"></div>
 
-                <div class="flex items-center justify-between">
+            <div class="card-body p-5">
+
+                <div class="flex items-start justify-between">
 
                     <div>
-
                         <p class="text-sm font-medium text-base-content/60">
                             Expired Memberships
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold">
-                            0
+                        <h2 class="mt-2 text-3xl font-bold tracking-tight">
+                            {{ expired_memberships }}
                         </h2>
-
                     </div>
 
-                    <div class="rounded-xl bg-error/10 p-3 text-2xl">
+                    <div
+                        class="rounded-2xl bg-primary/10 p-3 text-2xl transition-transform duration-300 group-hover:scale-110">
                         ⚠️
                     </div>
 
                 </div>
 
-                <div class="mt-4">
-
-                    <span class="text-xs text-base-content/60">
+                <div class="mt-5">
+                    <span class="text-xs text-base-content/50">
                         Require renewal
                     </span>
-
                 </div>
 
             </div>
-
         </div>
 
 
-        <!-- Attendance -->
-        <div class="card bg-base-100 shadow-sm">
+        <!-- TODAY'S ATTENDANCE -->
+        <div
+            class="group card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
 
-            <div class="card-body">
+            <div class="h-1 bg-primary"></div>
 
-                <div class="flex items-center justify-between">
+            <div class="card-body p-5">
+
+                <div class="flex items-start justify-between">
 
                     <div>
-
                         <p class="text-sm font-medium text-base-content/60">
                             Today's Attendance
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold">
-                            0
+                        <h2 class="mt-2 text-3xl font-bold tracking-tight">
+                            {{ today_present }}
                         </h2>
-
                     </div>
 
-                    <div class="rounded-xl bg-info/10 p-3 text-2xl">
+                    <div
+                        class="rounded-2xl bg-primary/10 p-3 text-2xl transition-transform duration-300 group-hover:scale-110">
                         🕐
                     </div>
 
                 </div>
 
-                <div class="mt-4">
-
-                    <span class="text-xs text-base-content/60">
+                <div class="mt-5">
+                    <span class="text-xs text-base-content/50">
                         Members checked in today
                     </span>
-
                 </div>
 
             </div>
-
         </div>
 
     </div>
 
 
-    <!-- Main dashboard area -->
-    <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
+    <!-- ========================================================= -->
+    <!-- CHARTS -->
+    <!-- ========================================================= -->
 
 
-        <!-- Recent Payments -->
-        <div class="card bg-base-100 shadow-sm xl:col-span-2">
+    <div class="grid grid-cols-1 gap-5 xl:grid-cols-2">
 
-            <div class="card-body">
+        <!-- ATTENDANCE OVERVIEW -->
+        <div
+            class="card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:border-primary/20 hover:shadow-lg">
 
-                <div class="flex items-center justify-between">
+            <div class="card-body p-5 sm:p-6">
+
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
 
                     <div>
+                        <div class="flex items-center gap-2">
+                            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                📊
+                            </div>
 
-                        <h2 class="card-title">
-                            Recent Payments
-                        </h2>
+                            <div>
+                                <h2 class="text-lg font-bold">
+                                    Attendance Overview
+                                </h2>
 
-                        <p class="text-sm text-base-content/60">
-                            Latest membership transactions
-                        </p>
+                                <p class="text-xs text-base-content/50">
+                                    Last 7 days
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="badge badge-primary badge-outline self-start">
+                        7 Days
+                    </span>
+
+                </div>
+
+                <div class="mt-5 rounded-2xl bg-base-200/40 p-3 sm:p-4">
+                    <div class="h-64 sm:h-72">
+                        <canvas id="attendanceChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- MEMBERSHIP OVERVIEW -->
+        <div
+            class="card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:border-primary/20 hover:shadow-lg">
+
+            <div class="card-body p-5 sm:p-6">
+
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                💳
+                            </div>
+
+                            <div>
+                                <h2 class="text-lg font-bold">
+                                    Membership Overview
+                                </h2>
+
+                                <p class="text-xs text-base-content/50">
+                                    Current membership status
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="badge badge-primary badge-outline self-start">
+                        Current
+                    </span>
+
+                </div>
+
+                <div class="mt-5 rounded-2xl bg-base-200/40 p-3 sm:p-4">
+                    <div class="h-64 sm:h-72">
+                        <canvas id="membershipChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- LOWER DASHBOARD -->
+    <!-- ========================================================= -->
+
+    <div class="grid grid-cols-1 gap-5 xl:grid-cols-3">
+
+        <!-- ===================================================== -->
+        <!-- RECENT MEMBERS -->
+        <!-- ===================================================== -->
+
+        <div
+            class="card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:border-primary/20 hover:shadow-lg xl:col-span-2">
+
+            <div class="card-body p-5 sm:p-6">
+
+                <!-- Header -->
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                    <div class="flex items-center gap-3">
+
+                        <div
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-xl text-primary">
+                            👥
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold">
+                                Recent Members
+                            </h2>
+
+                            <p class="text-xs text-base-content/50">
+                                Recently registered members
+                            </p>
+                        </div>
 
                     </div>
 
-                    <button class="btn btn-sm btn-ghost">
+                    <a href="{% url 'members:list' %}"
+                        class="btn btn-sm btn-ghost text-primary transition-colors hover:bg-primary/10">
                         View All
-                    </button>
+                        <span>→</span>
+                    </a>
 
                 </div>
 
 
-                <div class="mt-4 overflow-x-auto">
+                <!-- Members Table -->
+                <div class="mt-5 overflow-x-auto rounded-2xl border border-base-300">
+
+                    {% if recent_members %}
 
                     <table class="table">
 
-                        <thead>
+                        <thead class="bg-base-200/60">
 
                             <tr>
 
-                                <th>Member</th>
-                                <th>Plan</th>
-                                <th>Amount</th>
-                                <th>Status</th>
+                                <th class="text-xs uppercase tracking-wide text-base-content/50">
+                                    Member
+                                </th>
+
+                                <th class="hidden text-xs uppercase tracking-wide text-base-content/50 sm:table-cell">
+                                    Member ID
+                                </th>
+
+                                <th class="hidden text-xs uppercase tracking-wide text-base-content/50 md:table-cell">
+                                    Phone
+                                </th>
+
+                                <th class="text-xs uppercase tracking-wide text-base-content/50">
+                                    Status
+                                </th>
+
+                                <th class="hidden text-xs uppercase tracking-wide text-base-content/50 lg:table-cell">
+                                    Joined
+                                </th>
 
                             </tr>
 
@@ -235,33 +372,144 @@
 
                         <tbody>
 
-                            <tr>
+                            {% for member in recent_members %}
 
-                                <td colspan="4">
+                            <tr class="transition-colors hover:bg-primary/5">
 
-                                    <div class="py-10 text-center">
+                                <!-- Member -->
+                                <td>
 
-                                        <div class="text-4xl">
-                                            💰
+                                    <div class="flex items-center gap-3">
+
+                                        {% if member.profile_photo %}
+
+                                        <div class="avatar">
+
+                                            <div
+                                                class="w-10 rounded-full ring-2 ring-primary/20 ring-offset-1 ring-offset-base-100">
+
+                                                <img src="{{ member.profile_photo.url }}" alt="{{ member.full_name }}">
+
+                                            </div>
+
                                         </div>
 
-                                        <p class="mt-3 font-medium">
-                                            No payments yet
-                                        </p>
+                                        {% else %}
 
-                                        <p class="mt-1 text-sm text-base-content/60">
-                                            Payments will appear here.
-                                        </p>
+                                        <div class="avatar placeholder">
+
+                                            <div
+                                                class="w-10 rounded-full bg-primary/10 text-primary ring-2 ring-primary/10">
+
+                                                <span class="font-bold">
+                                                    {{ member.full_name|first|upper }}
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                        {% endif %}
+
+
+                                        <div class="min-w-0">
+
+                                            <div class="truncate font-semibold">
+                                                {{ member.full_name }}
+                                            </div>
+
+                                            <div class="max-w-[180px] truncate text-xs text-base-content/50">
+                                                {{ member.email|default:"No email" }}
+                                            </div>
+
+                                        </div>
 
                                     </div>
 
                                 </td>
 
+
+                                <!-- Member ID -->
+                                <td class="hidden sm:table-cell">
+
+                                    <span class="rounded-lg bg-base-200 px-2.5 py-1 font-mono text-xs font-medium">
+                                        {{ member.member_id }}
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Phone -->
+                                <td class="hidden md:table-cell text-sm">
+                                    {{ member.phone }}
+                                </td>
+
+
+                                <!-- Status -->
+                                <td>
+
+                                    {% if member.status == "ACTIVE" %}
+
+                                    <span class="badge badge-primary badge-sm gap-1">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-primary-content"></span>
+                                        Active
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge badge-ghost badge-sm gap-1">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-base-content/40"></span>
+                                        Inactive
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Joined -->
+                                <td class="hidden lg:table-cell">
+
+                                    <span class="text-sm text-base-content/70">
+                                        {{ member.join_date|date:"d M Y" }}
+                                    </span>
+
+                                </td>
+
                             </tr>
+
+                            {% endfor %}
 
                         </tbody>
 
                     </table>
+
+
+                    {% else %}
+
+                    <!-- Empty State -->
+
+                    <div class="flex flex-col items-center justify-center px-6 py-14 text-center">
+
+                        <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-3xl">
+                            👥
+                        </div>
+
+                        <p class="mt-4 font-semibold">
+                            No members yet
+                        </p>
+
+                        <p class="mt-1 max-w-sm text-sm text-base-content/50">
+                            Add your first member to start managing your gym members.
+                        </p>
+
+                        <a href="{% url 'members:create' %}" class="btn btn-primary btn-sm mt-5">
+                            ➕ Add Member
+                        </a>
+
+                    </div>
+
+                    {% endif %}
 
                 </div>
 
@@ -270,37 +518,62 @@
         </div>
 
 
-        <!-- Quick Actions -->
-        <div class="card bg-base-100 shadow-sm">
+        <!-- ===================================================== -->
+        <!-- TRAINER STATISTICS -->
+        <!-- ===================================================== -->
 
-            <div class="card-body">
+        <div
+            class="card overflow-hidden border border-base-300 bg-base-100 shadow-sm transition-all duration-300 hover:border-primary/20 hover:shadow-lg">
 
-                <h2 class="card-title">
-                    Quick Actions
-                </h2>
+            <div class="card-body p-5 sm:p-6">
 
-                <p class="text-sm text-base-content/60">
-                    Frequently used actions
-                </p>
+                <!-- Header -->
+                <div class="flex items-center justify-between">
+
+                    <div class="flex items-center gap-3">
+
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-xl text-primary">
+                            🏋️
+                        </div>
+
+                        <div>
+                            <h2 class="text-lg font-bold">
+                                Trainer Statistics
+                            </h2>
+
+                            <p class="text-xs text-base-content/50">
+                                Trainer status overview
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <span class="badge badge-primary badge-outline">
+                        {{ total_trainers }} Total
+                    </span>
+
+                </div>
 
 
-                <div class="mt-4 grid gap-3">
+                <!-- Trainer Bar Chart -->
+                <div class="mt-5 rounded-2xl bg-base-200/40 p-3 sm:p-4">
 
-                    <button class="btn btn-primary justify-start">
-                        ➕ Add New Member
-                    </button>
+                    <div class="h-64">
+                        <canvas id="trainerChart"></canvas>
+                    </div>
 
-                    <button class="btn btn-outline justify-start">
-                        💳 New Membership
-                    </button>
+                </div>
 
-                    <button class="btn btn-outline justify-start">
-                        🕐 Record Attendance
-                    </button>
 
-                    <button class="btn btn-outline justify-start">
-                        💰 Record Payment
-                    </button>
+                <!-- Manage Trainers -->
+                <div class="mt-5">
+
+                    <a href="{% url 'trainers:list' %}"
+                        class="btn btn-outline w-full border-primary text-primary transition-all hover:bg-primary hover:text-primary-content">
+                        Manage Trainers
+                        <span>→</span>
+                    </a>
 
                 </div>
 
@@ -311,6 +584,562 @@
     </div>
 
 
+    <!-- ========================================================= -->
+    <!-- MEMBERSHIP EXPIRY ALERTS -->
+    <!-- ========================================================= -->
+
+    <div class="card border border-primary/10 bg-base-100 shadow-sm">
+
+        <div class="card-body">
+
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+
+                    <h2 class="card-title">
+                        <span class="text-primary">⏰</span>
+                        Membership Expiry Alerts
+                    </h2>
+
+                    <p class="text-sm text-base-content/60">
+                        Active memberships expiring within the next 7 days
+                    </p>
+
+                </div>
+
+                <a href="{% url 'memberships:membership_list' %}" class="btn btn-sm btn-ghost text-primary">
+                    View Memberships
+                </a>
+
+            </div>
+
+
+            <div class="mt-4 overflow-x-auto">
+
+                {% if expiring_memberships %}
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Member</th>
+                            <th>Plan</th>
+                            <th>Expiry Date</th>
+                            <th>Days Left</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for membership in expiring_memberships %}
+
+                        <tr class="hover">
+
+                            <td class="font-medium">
+                                {{ membership.member.full_name }}
+                            </td>
+
+                            <td>
+                                {{ membership.plan.name }}
+                            </td>
+
+                            <td>
+                                {{ membership.end_date|date:"d M Y" }}
+                            </td>
+
+                            <td>
+
+                                {% with days_left=membership.end_date|timeuntil %}
+
+                                <span class="badge badge-primary badge-sm">
+                                    {{ days_left }}
+                                </span>
+
+                                {% endwith %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+                {% else %}
+
+                <div class="rounded-xl bg-primary/5 py-8 text-center">
+
+                    <div class="text-4xl">
+                        ✓
+                    </div>
+
+                    <p class="mt-2 font-medium">
+                        No memberships expiring soon
+                    </p>
+
+                    <p class="mt-1 text-sm text-base-content/60">
+                        There are no active memberships expiring within 7 days.
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- QUICK ACTIONS -->
+    <!-- ========================================================= -->
+
+    <div class="card border border-primary/10 bg-base-100 shadow-sm">
+
+        <div class="card-body">
+
+            <div>
+
+                <h2 class="card-title">
+                    <span class="text-primary">⚡</span>
+                    Quick Actions
+                </h2>
+
+                <p class="text-sm text-base-content/60">
+                    Frequently used actions
+                </p>
+
+            </div>
+
+
+            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+
+
+                <!-- Add Member -->
+
+                <a href="{% url 'members:create' %}" class="btn btn-primary justify-start">
+                    ➕ Add New Member
+                </a>
+
+
+                <!-- Membership -->
+
+                <a href="{% url 'memberships:membership_create' %}"
+                    class="btn btn-outline justify-start border-primary text-primary hover:bg-primary hover:text-primary-content">
+                    💳 New Membership
+                </a>
+
+
+                <!-- Attendance -->
+
+                <a href="{% url 'attendance:dashboard' %}"
+                    class="btn btn-outline justify-start border-primary text-primary hover:bg-primary hover:text-primary-content">
+                    🕐 Record Attendance
+                </a>
+
+
+                <!-- Trainers -->
+
+                <a href="{% url 'trainers:create' %}"
+                    class="btn btn-outline justify-start border-primary text-primary hover:bg-primary hover:text-primary-content">
+                    🏋️ Add Trainer
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
+
+
+<!-- ============================================================= -->
+<!-- CHART.JS -->
+<!-- ============================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+{{ attendance_labels|json_script:"attendance-labels" }}
+{{ attendance_data|json_script:"attendance-data" }}
+
+
+<script>
+
+    /*
+     * GMS Primary Brand Color
+     */
+    const gmsPrimary = "#ff4000";
+    const gmsPrimaryHover = "#e63a00";
+
+
+    /*
+     * Attendance Data
+     */
+
+    const attendanceLabels = JSON.parse(
+        document.getElementById("attendance-labels").textContent
+    );
+
+    const attendanceData = JSON.parse(
+        document.getElementById("attendance-data").textContent
+    );
+
+
+    /*
+     * Attendance Bar Chart
+     */
+
+    const attendanceCanvas = document.getElementById(
+        "attendanceChart"
+    );
+
+    if (attendanceCanvas) {
+
+        new Chart(attendanceCanvas, {
+
+            type: "bar",
+
+            data: {
+
+                labels: attendanceLabels,
+
+                datasets: [
+                    {
+                        label: "Attendance",
+
+                        data: attendanceData,
+
+                        backgroundColor: gmsPrimary,
+
+                        borderColor: gmsPrimary,
+
+                        borderWidth: 1,
+
+                        borderRadius: 8,
+
+                        borderSkipped: false,
+
+                        hoverBackgroundColor: gmsPrimaryHover,
+
+                        hoverBorderColor: gmsPrimaryHover
+                    }
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    },
+
+                    tooltip: {
+
+                        backgroundColor: gmsPrimary,
+
+                        titleColor: "#ffffff",
+
+                        bodyColor: "#ffffff",
+
+                        displayColors: false,
+
+                        padding: 12,
+
+                        callbacks: {
+
+                            label: function (context) {
+
+                                return " Attendance: " + context.raw;
+
+                            }
+
+                        }
+
+                    }
+
+                },
+
+                scales: {
+
+                    x: {
+
+                        grid: {
+                            display: false
+                        },
+
+                        ticks: {
+                            color: "#888888"
+                        }
+
+                    },
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            precision: 0,
+
+                            color: "#888888"
+
+                        },
+
+                        grid: {
+
+                            color: "rgba(255, 64, 0, 0.08)"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+
+    /*
+     * Membership Overview Chart
+     */
+
+    const membershipCanvas = document.getElementById(
+        "membershipChart"
+    );
+
+    if (membershipCanvas) {
+        new Chart(membershipCanvas, {
+            type: "pie",
+
+            data: {
+                labels: [
+                    "Active",
+                    "Expired"
+                ],
+
+                datasets: [
+                    {
+                        data: [
+                            {{ active_memberships }},
+                            {{ expired_memberships }}
+                        ],
+
+            backgroundColor: [
+                "#ff4000",
+                "rgba(255, 64, 0, 0.30)"
+            ],
+
+            borderColor: [
+                "#ff4000",
+                "#ff4000"
+            ],
+
+            borderWidth: 2,
+
+            hoverOffset: 8
+        }
+                ]
+            },
+
+    options: {
+        responsive: true,
+
+            maintainAspectRatio: false,
+
+                plugins: {
+
+            legend: {
+                position: "bottom",
+
+                    labels: {
+                    color: "#888888",
+                        padding: 20,
+                            usePointStyle: true,
+                                pointStyle: "circle"
+                }
+            },
+
+            tooltip: {
+                backgroundColor: "#ff4000",
+                    titleColor: "#ffffff",
+                        bodyColor: "#ffffff",
+                            displayColors: true,
+                                padding: 12,
+
+                                    callbacks: {
+                    label: function(context) {
+
+                        const value = context.raw;
+
+                        const total = context.dataset.data.reduce(
+                            (sum, current) => sum + current,
+                            0
+                        );
+
+                        const percentage = total > 0
+                            ? ((value / total) * 100).toFixed(1)
+                            : 0;
+
+                        return " " +
+                            context.label +
+                            ": " +
+                            value +
+                            " (" +
+                            percentage +
+                            "%)";
+                    }
+                }
+            }
+        }
+    }
+        });
+    }
+
+    
+        /*
+     * Trainer Statistics Bar Chart
+     */
+
+    const trainerCanvas = document.getElementById(
+        "trainerChart"
+    );
+
+    if (trainerCanvas) {
+
+        new Chart(trainerCanvas, {
+
+            type: "bar",
+
+            data: {
+                labels: [
+                    "Total",
+                    "Active",
+                    "Inactive"
+                ],
+
+                datasets: [
+                    {
+                        label: "Trainers",
+
+                        data: [
+                            {{ total_trainers }},
+                            {{ active_trainers }},
+                            {{ inactive_trainers }}
+                        ],
+
+                        backgroundColor: [
+                            "#ff4000",
+                            "#34b654",
+                            "rgba(255, 64, 0, 0.35)"
+                        ],
+
+                        borderColor: "#ff4000",
+
+                        borderWidth: 1,
+
+                        borderRadius: 8,
+
+                        borderSkipped: false,
+
+                        hoverBackgroundColor: "#e63a00"
+                    }
+                ]
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    },
+
+                    tooltip: {
+
+                        backgroundColor: "#ff4000",
+
+                        titleColor: "#ffffff",
+
+                        bodyColor: "#ffffff",
+
+                        displayColors: false,
+
+                        padding: 12,
+
+                        callbacks: {
+
+                            label: function(context) {
+
+                                return " Trainers: " + context.raw;
+
+                            }
+
+                        }
+
+                    }
+
+                },
+
+                scales: {
+
+                    x: {
+
+                        grid: {
+                            display: false
+                        },
+
+                        ticks: {
+                            color: "#888888"
+                        }
+
+                    },
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+                            precision: 0,
+                            color: "#888888"
+                        },
+
+                        grid: {
+                            color: "rgba(255, 64, 0, 0.08)"
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+
+
+</script>
 
 {% endblock %}
