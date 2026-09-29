@@ -1,0 +1,798 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- HEADER -->
+
+    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+
+        <div>
+
+            <h1 class="text-3xl font-bold">
+                Combined Report
+            </h1>
+
+            <p class="text-base-content/60 mt-1">
+                Overview of members, memberships, attendance and trainers.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'reports:dashboard' %}"
+            class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-primary-content"
+        >
+            ← Reports Dashboard
+        </a>
+        <a
+            href="{% url 'reports:combined_report_pdf' %}?date_from={{ date_from }}&date_to={{ date_to }}"
+            class="btn bg-primary text-primary-content border-primary hover:opacity-90"
+        >
+            📄 Download PDF
+        </a>
+
+    </div>
+
+
+    <!-- DATE FILTER -->
+
+    <div class="card bg-base-100 shadow-md border border-base-300">
+
+        <div class="card-body">
+
+            <h2 class="card-title">
+                Report Period
+            </h2>
+
+            <form method="get">
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+
+                    <div class="form-control">
+
+                        <label class="label">
+
+                            <span class="label-text">
+                                From Date
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date_from"
+                            value="{{ date_from }}"
+                            class="input input-bordered focus:border-primary"
+                        >
+
+                    </div>
+
+
+                    <div class="form-control">
+
+                        <label class="label">
+
+                            <span class="label-text">
+                                To Date
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date_to"
+                            value="{{ date_to }}"
+                            class="input input-bordered focus:border-primary"
+                        >
+
+                    </div>
+
+
+                    <div class="flex gap-2">
+
+                        <button
+                            type="submit"
+                            class="btn bg-primary text-primary-content border-primary hover:opacity-90"
+                        >
+                            🔍 Apply
+                        </button>
+
+                        <a
+                            href="{% url 'reports:combined_report' %}"
+                            class="btn btn-outline"
+                        >
+                            Reset
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+            <p class="text-sm text-base-content/60 mt-2">
+                By default, the report uses the last 30 days.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- MEMBERS -->
+
+    <div>
+
+        <div class="flex items-center justify-between mb-3">
+
+            <h2 class="text-xl font-bold">
+                👥 Members
+            </h2>
+
+            <a
+                href="{% url 'reports:member_report' %}"
+                class="text-primary hover:underline"
+            >
+                Detailed Report →
+            </a>
+
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Total Members
+                    </p>
+
+                    <h3 class="text-3xl font-bold">
+                        {{ total_members }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Active Members
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-success">
+                        {{ active_members }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Inactive Members
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-error">
+                        {{ inactive_members }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        New in Period
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-primary">
+                        {{ new_members }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MEMBERSHIPS -->
+
+    <div>
+
+        <div class="flex items-center justify-between mb-3">
+
+            <h2 class="text-xl font-bold">
+                💳 Memberships
+            </h2>
+
+            <a
+                href="{% url 'reports:membership_report' %}"
+                class="text-primary hover:underline"
+            >
+                Detailed Report →
+            </a>
+
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Total Memberships
+                    </p>
+
+                    <h3 class="text-3xl font-bold">
+                        {{ total_memberships }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Active
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-success">
+                        {{ active_memberships }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Expired
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-error">
+                        {{ expired_memberships }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        New in Period
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-primary">
+                        {{ new_memberships }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ATTENDANCE -->
+
+    <div>
+
+        <div class="flex items-center justify-between mb-3">
+
+            <h2 class="text-xl font-bold">
+                📅 Attendance
+            </h2>
+
+            <a
+                href="{% url 'reports:attendance_report' %}"
+                class="text-primary hover:underline"
+            >
+                Detailed Report →
+            </a>
+
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Total Records
+                    </p>
+
+                    <h3 class="text-3xl font-bold">
+                        {{ total_attendance }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Present
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-success">
+                        {{ present_attendance }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Absent
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-error">
+                        {{ absent_attendance }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Attendance Rate
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-primary">
+                        {{ attendance_rate }}%
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TRAINERS -->
+
+    <div>
+
+        <div class="flex items-center justify-between mb-3">
+
+            <h2 class="text-xl font-bold">
+                🏋️ Trainers
+            </h2>
+
+            <a
+                href="{% url 'reports:trainer_report' %}"
+                class="text-primary hover:underline"
+            >
+                Detailed Report →
+            </a>
+
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Total Trainers
+                    </p>
+
+                    <h3 class="text-3xl font-bold">
+                        {{ total_trainers }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Active
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-success">
+                        {{ active_trainers }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        Inactive
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-error">
+                        {{ inactive_trainers }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="card bg-base-100 shadow-md border border-base-300">
+
+                <div class="card-body">
+
+                    <p class="text-sm text-base-content/60">
+                        New in Period
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-primary">
+                        {{ new_trainers }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ATTENDANCE CHART -->
+
+    <div class="card bg-base-100 shadow-md border border-base-300">
+
+        <div class="card-body">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <h2 class="card-title">
+                        Attendance Overview
+                    </h2>
+
+                    <p class="text-sm text-base-content/60">
+                        Present attendance for the last 7 days.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="mt-6">
+
+                <canvas
+                    id="combinedAttendanceChart"
+                    height="100"
+                ></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RECENT MEMBERS -->
+
+    <div class="card bg-base-100 shadow-md border border-base-300">
+
+        <div class="card-body p-0">
+
+            <div class="p-6 border-b border-base-300">
+
+                <div class="flex items-center justify-between">
+
+                    <h2 class="text-xl font-bold">
+                        Recent Members
+                    </h2>
+
+                    <a
+                        href="{% url 'reports:member_report' %}"
+                        class="text-primary hover:underline"
+                    >
+                        View All →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            {% if recent_members %}
+
+                <div class="overflow-x-auto">
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Member ID</th>
+                                <th>Name</th>
+                                <th>Join Date</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for member in recent_members %}
+
+                                <tr class="hover">
+
+                                    <td>
+                                        {{ member.member_id }}
+                                    </td>
+
+                                    <td class="font-medium">
+                                        {{ member.full_name }}
+                                    </td>
+
+                                    <td>
+                                        {{ member.join_date|date:"d M Y" }}
+                                    </td>
+
+                                    <td>
+
+                                        {% if member.status == "ACTIVE" %}
+
+                                            <span class="badge badge-success">
+                                                Active
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge badge-error">
+                                                Inactive
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="p-8 text-center text-base-content/60">
+                    No members found.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- EXPIRING MEMBERSHIPS -->
+
+    <div class="card bg-base-100 shadow-md border border-base-300">
+
+        <div class="card-body">
+
+            <div class="flex items-center justify-between mb-4">
+
+                <div>
+
+                    <h2 class="card-title">
+                        Memberships Expiring Soon
+                    </h2>
+
+                    <p class="text-sm text-base-content/60">
+                        Active memberships expiring within 7 days.
+                    </p>
+
+                </div>
+
+                <a
+                    href="{% url 'reports:membership_report' %}"
+                    class="text-primary hover:underline"
+                >
+                    View Report →
+                </a>
+
+            </div>
+
+
+            {% if expiring_memberships %}
+
+                <div class="overflow-x-auto">
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Member</th>
+                                <th>Plan</th>
+                                <th>Expiry Date</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for membership in expiring_memberships %}
+
+                                <tr class="hover">
+
+                                    <td>
+                                        {{ membership.member.full_name }}
+                                    </td>
+
+                                    <td>
+                                        {{ membership.plan.name }}
+                                    </td>
+
+                                    <td class="font-medium text-warning">
+                                        {{ membership.end_date|date:"d M Y" }}
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="p-6 text-center text-base-content/60">
+                    No memberships are expiring within the next 7 days.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CHART.JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    const combinedAttendanceLabels = {{ attendance_labels|safe }};
+    const combinedAttendanceData = {{ attendance_data|safe }};
+
+    const combinedAttendanceCanvas = document.getElementById(
+        "combinedAttendanceChart"
+    );
+
+    if (combinedAttendanceCanvas) {
+
+        new Chart(
+            combinedAttendanceCanvas,
+            {
+                type: "bar",
+
+                data: {
+                    labels: combinedAttendanceLabels,
+
+                    datasets: [
+                        {
+                            label: "Present",
+                            data: combinedAttendanceData,
+
+                            backgroundColor: "#ff4000",
+
+                            borderRadius: 6,
+                        }
+                    ]
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                    },
+
+                    scales: {
+
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                            },
+                        },
+
+                    },
+
+                },
+            }
+        );
+
+    }
+
+</script>
+
+{% endblock %}

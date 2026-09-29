@@ -1,0 +1,682 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <!-- HEADER -->
+    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+
+        <div>
+            <h1 class="text-3xl font-bold">
+                Trainer Report
+            </h1>
+
+            <p class="text-base-content/60 mt-1">
+                Analyze trainer information, status, experience and specialization.
+            </p>
+        </div>
+
+        <a
+            href="{% url 'reports:dashboard' %}"
+            class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-primary-content"
+        >
+            ← Reports Dashboard
+        </a>
+        <a
+            href="{% url 'reports:trainer_report_pdf' %}?q={{ search_query }}&status={{ status_filter }}&gender={{ gender_filter }}&specialization={{ specialization_filter }}&joining_from={{ joining_from }}&joining_to={{ joining_to }}&experience={{ experience_filter }}"
+            class="btn bg-primary text-primary-content border-primary hover:opacity-90"
+        >
+            📄 Download PDF
+        </a>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+
+        <!-- Total -->
+
+        <div class="card bg-base-100 shadow-md border border-base-300">
+            <div class="card-body">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Total Trainers
+                        </p>
+
+                        <h2 class="text-3xl font-bold mt-1">
+                            {{ total_trainers }}
+                        </h2>
+                    </div>
+
+                    <div class="text-3xl text-primary">
+                        🏋️
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Active -->
+
+        <div class="card bg-base-100 shadow-md border border-base-300">
+            <div class="card-body">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Active
+                        </p>
+
+                        <h2 class="text-3xl font-bold text-success mt-1">
+                            {{ active_trainers }}
+                        </h2>
+                    </div>
+
+                    <div class="text-3xl text-success">
+                        ✓
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Inactive -->
+
+        <div class="card bg-base-100 shadow-md border border-base-300">
+            <div class="card-body">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Inactive
+                        </p>
+
+                        <h2 class="text-3xl font-bold text-error mt-1">
+                            {{ inactive_trainers }}
+                        </h2>
+                    </div>
+
+                    <div class="text-3xl text-error">
+                        ⛔
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Male -->
+
+        <div class="card bg-base-100 shadow-md border border-base-300">
+            <div class="card-body">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Male
+                        </p>
+
+                        <h2 class="text-3xl font-bold mt-1">
+                            {{ male_trainers }}
+                        </h2>
+                    </div>
+
+                    <div class="text-3xl text-primary">
+                        👨
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Female -->
+
+        <div class="card bg-base-100 shadow-md border border-base-300">
+            <div class="card-body">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Female
+                        </p>
+
+                        <h2 class="text-3xl font-bold mt-1">
+                            {{ female_trainers }}
+                        </h2>
+                    </div>
+
+                    <div class="text-3xl text-primary">
+                        👩
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- FILTERS -->
+
+    <div class="card bg-base-100 shadow-md border border-base-300">
+
+        <div class="card-body">
+
+            <h2 class="card-title mb-2">
+                Filter Trainers
+            </h2>
+
+            <form method="get">
+
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+
+                    <!-- Search -->
+
+                    <div class="form-control">
+
+                        <label class="label">
+                            <span class="label-text">
+                                Search
+                            </span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="q"
+                            value="{{ search_query }}"
+                            placeholder="Name, ID, phone..."
+                            class="input input-bordered focus:border-primary"
+                        >
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    <div class="form-control">
+
+                        <label class="label">
+                            <span class="label-text">
+                                Status
+                            </span>
+                        </label>
+
+                        <select
+                            name="status"
+                            class="select select-bordered focus:border-primary"
+                        >
+
+                            <option value="">
+                                All Statuses
+                            </option>
+
+                            {% for value, label in status_choices %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if status_filter == value %}selected{% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Gender -->
+
+                    <div class="form-control">
+
+                        <label class="label">
+                            <span class="label-text">
+                                Gender
+                            </span>
+                        </label>
+
+                        <select
+                            name="gender"
+                            class="select select-bordered focus:border-primary"
+                        >
+
+                            <option value="">
+                                All Genders
+                            </option>
+
+                            {% for value, label in gender_choices %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if gender_filter == value %}selected{% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Specialization -->
+
+                    <div class="form-control">
+
+                        <label class="label">
+                            <span class="label-text">
+                                Specialization
+                            </span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="specialization"
+                            value="{{ specialization_filter }}"
+                            placeholder="e.g. Strength Training"
+                            class="input input-bordered focus:border-primary"
+                        >
+
+                    </div>
+
+
+                    <!-- Joining From -->
+
+                    <div class="form-control">
+
+                        <label class="label">
+                            <span class="label-text">
+                                Joining From
+                            </span>
+                        </label>
+
+                        <input
+                            type="date"
+                            name="joining_from"
+                            value="{{ joining_from }}"
+                            class="input input-bordered focus:border-primary"
+                        >
+
+                    </div>
+
+
+                    <!-- Joining To -->
+
+                    <div class="form-control">
+
+                        <label class="label">
+                            <span class="label-text">
+                                Joining To
+                            </span>
+                        </label>
+
+                        <input
+                            type="date"
+                            name="joining_to"
+                            value="{{ joining_to }}"
+                            class="input input-bordered focus:border-primary"
+                        >
+
+                    </div>
+
+
+                    <!-- Experience -->
+
+                    <div class="form-control">
+
+                        <label class="label">
+                            <span class="label-text">
+                                Experience
+                            </span>
+                        </label>
+
+                        <select
+                            name="experience"
+                            class="select select-bordered focus:border-primary"
+                        >
+
+                            <option value="">
+                                All Experience
+                            </option>
+
+                            <option
+                                value="0-2"
+                                {% if experience_filter == "0-2" %}selected{% endif %}
+                            >
+                                0 - 2 Years
+                            </option>
+
+                            <option
+                                value="3-5"
+                                {% if experience_filter == "3-5" %}selected{% endif %}
+                            >
+                                3 - 5 Years
+                            </option>
+
+                            <option
+                                value="6-10"
+                                {% if experience_filter == "6-10" %}selected{% endif %}
+                            >
+                                6 - 10 Years
+                            </option>
+
+                            <option
+                                value="10+"
+                                {% if experience_filter == "10+" %}selected{% endif %}
+                            >
+                                11+ Years
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="flex flex-wrap gap-3 mt-5">
+
+                    <button
+                        type="submit"
+                        class="btn bg-primary text-primary-content border-primary hover:opacity-90"
+                    >
+                        🔍 Apply Filters
+                    </button>
+
+                    <a
+                        href="{% url 'reports:trainer_report' %}"
+                        class="btn btn-outline"
+                    >
+                        Reset
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- TRAINER TABLE -->
+
+    <div class="card bg-base-100 shadow-md border border-base-300">
+
+        <div class="card-body p-0">
+
+            <div class="p-6 border-b border-base-300">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <h2 class="text-xl font-bold">
+                            Trainer Records
+                        </h2>
+
+                        <p class="text-sm text-base-content/60 mt-1">
+                            Showing filtered trainer records.
+                        </p>
+                    </div>
+
+                    <span class="badge badge-outline">
+                        {{ page_obj.paginator.count }} records
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            {% if trainers %}
+
+                <div class="overflow-x-auto">
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Trainer</th>
+                                <th>Specialization</th>
+                                <th>Experience</th>
+                                <th>Joining Date</th>
+                                <th>Gender</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for trainer in trainers %}
+
+                                <tr class="hover">
+
+                                    <!-- Trainer -->
+
+                                    <td>
+
+                                        <div class="flex items-center gap-3">
+
+                                            {% if trainer.profile_photo %}
+
+                                                <div class="avatar">
+
+                                                    <div class="w-10 rounded-full">
+
+                                                        <img
+                                                            src="{{ trainer.profile_photo.url }}"
+                                                            alt="{{ trainer.full_name }}"
+                                                        >
+
+                                                    </div>
+
+                                                </div>
+
+                                            {% else %}
+
+                                                <div class="avatar placeholder">
+
+                                                    <div class="w-10 rounded-full bg-primary text-primary-content">
+
+                                                        <span>
+                                                            {{ trainer.full_name|first|upper }}
+                                                        </span>
+
+                                                    </div>
+
+                                                </div>
+
+                                            {% endif %}
+
+
+                                            <div>
+
+                                                <div class="font-bold">
+                                                    {{ trainer.full_name }}
+                                                </div>
+
+                                                <div class="text-sm text-base-content/60">
+                                                    {{ trainer.trainer_id }}
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- Specialization -->
+
+                                    <td>
+                                        {{ trainer.specialization }}
+                                    </td>
+
+
+                                    <!-- Experience -->
+
+                                    <td>
+                                        {{ trainer.experience_years }} years
+                                    </td>
+
+
+                                    <!-- Joining Date -->
+
+                                    <td>
+                                        {{ trainer.joining_date|date:"d M Y" }}
+                                    </td>
+
+
+                                    <!-- Gender -->
+
+                                    <td>
+                                        {{ trainer.get_gender_display }}
+                                    </td>
+
+
+                                    <!-- Status -->
+
+                                    <td>
+
+                                        {% if trainer.status == "ACTIVE" %}
+
+                                            <span class="badge badge-success">
+                                                Active
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge badge-error">
+                                                Inactive
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- Action -->
+
+                                    <td>
+
+                                        <a
+                                            href="{% url 'trainers:detail' trainer.trainer_id %}"
+                                            class="btn btn-sm btn-outline border-primary text-primary hover:bg-primary hover:text-primary-content"
+                                        >
+                                            View
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- PAGINATION -->
+
+                {% if page_obj.has_other_pages %}
+
+                    <div class="flex justify-center p-6">
+
+                        <div class="join">
+
+                            {% if page_obj.has_previous %}
+
+                                <a
+                                    href="?page={{ page_obj.previous_page_number }}&q={{ search_query }}&status={{ status_filter }}&gender={{ gender_filter }}&specialization={{ specialization_filter }}&joining_from={{ joining_from }}&joining_to={{ joining_to }}&experience={{ experience_filter }}"
+                                    class="join-item btn btn-outline"
+                                >
+                                    «
+                                </a>
+
+                            {% endif %}
+
+
+                            <span class="join-item btn btn-disabled">
+                                Page {{ page_obj.number }}
+                                of {{ page_obj.paginator.num_pages }}
+                            </span>
+
+
+                            {% if page_obj.has_next %}
+
+                                <a
+                                    href="?page={{ page_obj.next_page_number }}&q={{ search_query }}&status={{ status_filter }}&gender={{ gender_filter }}&specialization={{ specialization_filter }}&joining_from={{ joining_from }}&joining_to={{ joining_to }}&experience={{ experience_filter }}"
+                                    class="join-item btn btn-outline"
+                                >
+                                    »
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+            {% else %}
+
+                <!-- EMPTY STATE -->
+
+                <div class="p-12 text-center">
+
+                    <div class="text-5xl mb-4">
+                        🏋️
+                    </div>
+
+                    <h3 class="text-xl font-bold">
+                        No Trainers Found
+                    </h3>
+
+                    <p class="text-base-content/60 mt-2">
+                        No trainers match the selected filters.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

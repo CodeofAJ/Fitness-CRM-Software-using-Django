@@ -26,7 +26,7 @@ Dashboard | GMS
 
         <div class="flex gap-2">
             <a href="{% url 'members:create' %}" class="btn btn-primary">
-                ➕ Add Member
+                <i data-lucide="user-plus" class="w-5 h-5"></i>Add Member
             </a>
         </div>
 
@@ -65,7 +65,7 @@ Dashboard | GMS
 
                     <div
                         class="rounded-2xl bg-primary/10 p-3 text-2xl transition-transform duration-300 group-hover:scale-110">
-                        👥
+                        <i data-lucide="users" class="w-8 h-8 text-primary"></i>
                     </div>
 
                 </div>
@@ -106,7 +106,7 @@ Dashboard | GMS
 
                     <div
                         class="rounded-2xl bg-primary/10 p-3 text-2xl transition-transform duration-300 group-hover:scale-110">
-                        💳
+                        <i data-lucide="circle-check" class="w-8 h-8 text-primary"></i>
                     </div>
 
                 </div>
@@ -143,7 +143,7 @@ Dashboard | GMS
 
                     <div
                         class="rounded-2xl bg-primary/10 p-3 text-2xl transition-transform duration-300 group-hover:scale-110">
-                        ⚠️
+                        <i data-lucide="calendar-clock" class="w-8 h-8 text-primary"></i>
                     </div>
 
                 </div>
@@ -180,7 +180,7 @@ Dashboard | GMS
 
                     <div
                         class="rounded-2xl bg-primary/10 p-3 text-2xl transition-transform duration-300 group-hover:scale-110">
-                        🕐
+                        <i data-lucide="calendar-check" class="w-8 h-8 text-primary"></i>
                     </div>
 
                 </div>
@@ -215,7 +215,7 @@ Dashboard | GMS
                     <div>
                         <div class="flex items-center gap-2">
                             <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                                📊
+                                <i data-lucide="chart-column" class="w-5 h-5 text-primary"></i>
                             </div>
 
                             <div>
@@ -257,7 +257,7 @@ Dashboard | GMS
                     <div>
                         <div class="flex items-center gap-2">
                             <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                                💳
+                               <i data-lucide="badge-check" class="w-5 h-5 text-primary"></i>
                             </div>
 
                             <div>
@@ -311,7 +311,7 @@ Dashboard | GMS
 
                         <div
                             class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-xl text-primary">
-                            👥
+                            <i data-lucide="users" class="w-8 h-8 text-primary"></i>
                         </div>
 
                         <div>
@@ -534,7 +534,7 @@ Dashboard | GMS
 
                         <div
                             class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-xl text-primary">
-                            🏋️
+                             <i data-lucide="dumbbell" class="w-8 h-8 text-primary"></i>
                         </div>
 
                         <div>
@@ -597,7 +597,7 @@ Dashboard | GMS
                 <div>
 
                     <h2 class="card-title">
-                        <span class="text-primary">⏰</span>
+                        <i data-lucide="calendar-clock" class="w-5 h-5 text-primary"></i>
                         Membership Expiry Alerts
                     </h2>
 
@@ -724,7 +724,7 @@ Dashboard | GMS
                 <!-- Add Member -->
 
                 <a href="{% url 'members:create' %}" class="btn btn-primary justify-start">
-                    ➕ Add New Member
+                    <i data-lucide="user-plus" class="w-5 h-5 text-white"></i> Add New Member
                 </a>
 
 
@@ -732,7 +732,7 @@ Dashboard | GMS
 
                 <a href="{% url 'memberships:membership_create' %}"
                     class="btn btn-outline justify-start border-primary text-primary hover:bg-primary hover:text-primary-content">
-                    💳 New Membership
+                    <i data-lucide="users" class="w-5 h-5 text-primary"></i> New Membership
                 </a>
 
 
@@ -740,7 +740,7 @@ Dashboard | GMS
 
                 <a href="{% url 'attendance:dashboard' %}"
                     class="btn btn-outline justify-start border-primary text-primary hover:bg-primary hover:text-primary-content">
-                    🕐 Record Attendance
+                    <i data-lucide="file-chart-column" class="w-5 h-5 text-primary"></i> Record Attendance
                 </a>
 
 
@@ -748,7 +748,7 @@ Dashboard | GMS
 
                 <a href="{% url 'trainers:create' %}"
                     class="btn btn-outline justify-start border-primary text-primary hover:bg-primary hover:text-primary-content">
-                    🏋️ Add Trainer
+                    <i data-lucide="user-plus" class="w-5 h-5"></i> Add Trainer
                 </a>
 
             </div>
@@ -938,7 +938,7 @@ Dashboard | GMS
                     {
                         data: [
                             {{ active_memberships }},
-                            {{ expired_memberships }}
+                    {{ expired_memberships }}
                         ],
 
             backgroundColor: [
@@ -1012,10 +1012,10 @@ Dashboard | GMS
         });
     }
 
-    
-        /*
-     * Trainer Statistics Bar Chart
-     */
+
+    /*
+ * Trainer Statistics Bar Chart
+ */
 
     const trainerCanvas = document.getElementById(
         "trainerChart"
@@ -1040,99 +1040,99 @@ Dashboard | GMS
 
                         data: [
                             {{ total_trainers }},
-                            {{ active_trainers }},
+                    {{ active_trainers }},
                             {{ inactive_trainers }}
                         ],
 
-                        backgroundColor: [
-                            "#ff4000",
-                            "rgba(255, 64, 0, 0.75)",
-                            "rgba(255, 64, 0, 0.35)"
-                        ],
+    backgroundColor: [
+        "#ff4000",
+        "rgba(255, 64, 0, 0.75)",
+        "rgba(255, 64, 0, 0.35)"
+    ],
 
-                        borderColor: "#ff4000",
+        borderColor: "#ff4000",
 
-                        borderWidth: 1,
+            borderWidth: 1,
 
-                        borderRadius: 8,
+                borderRadius: 8,
 
-                        borderSkipped: false,
+                    borderSkipped: false,
 
                         hoverBackgroundColor: "#e63a00"
                     }
                 ]
             },
 
-            options: {
+    options: {
 
-                responsive: true,
+        responsive: true,
 
-                maintainAspectRatio: false,
+            maintainAspectRatio: false,
 
                 plugins: {
 
-                    legend: {
-                        display: false
-                    },
+            legend: {
+                display: false
+            },
 
-                    tooltip: {
+            tooltip: {
 
-                        backgroundColor: "#ff4000",
+                backgroundColor: "#ff4000",
 
-                        titleColor: "#ffffff",
+                    titleColor: "#ffffff",
 
                         bodyColor: "#ffffff",
 
-                        displayColors: false,
+                            displayColors: false,
 
-                        padding: 12,
+                                padding: 12,
 
-                        callbacks: {
+                                    callbacks: {
 
-                            label: function(context) {
+                    label: function(context) {
 
-                                return " Trainers: " + context.raw;
-
-                            }
-
-                        }
-
-                    }
-
-                },
-
-                scales: {
-
-                    x: {
-
-                        grid: {
-                            display: false
-                        },
-
-                        ticks: {
-                            color: "#888888"
-                        }
-
-                    },
-
-                    y: {
-
-                        beginAtZero: true,
-
-                        ticks: {
-                            precision: 0,
-                            color: "#888888"
-                        },
-
-                        grid: {
-                            color: "rgba(255, 64, 0, 0.08)"
-                        }
+                        return " Trainers: " + context.raw;
 
                     }
 
                 }
 
             }
+
+        },
+
+        scales: {
+
+            x: {
+
+                grid: {
+                    display: false
+                },
+
+                ticks: {
+                    color: "#888888"
+                }
+
+            },
+
+            y: {
+
+                beginAtZero: true,
+
+                    ticks: {
+                    precision: 0,
+                        color: "#888888"
+                },
+
+                grid: {
+                    color: "rgba(255, 64, 0, 0.08)"
+                }
+
+            }
+
+        }
+
+    }
 
         });
 
