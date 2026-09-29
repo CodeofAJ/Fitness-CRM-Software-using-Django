@@ -270,30 +270,6 @@ Use the superuser credentials created with:
 ```bash
 python manage.py createsuperuser
 ```
-
----
-
-## 📸 Screenshots
-
-Add screenshots of your application here.
-
-Example:
-
-```text
-Dashboard
-Member Management
-Membership Management
-Attendance
-Trainer Management
-Reports
-```
-
-You can add them to the README using:
-
-```markdown
-![Dashboard](screenshots/dashboard.png)
-```
-
 ---
 
 ## 🔮 Future Improvements
