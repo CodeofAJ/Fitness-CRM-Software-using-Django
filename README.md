@@ -1,4 +1,6 @@
 # 🏋️ Fitness CRM
+<img width="1366" height="768" alt="Login" src="https://github.com/user-attachments/assets/8bf671cf-a806-40b6-8585-bf5dd498f966" />
+<img width="1366" height="768" alt="dashboard" src="https://github.com/user-attachments/assets/e551cff0-19d4-401f-8fdf-c66c021c464b" />
 
 A full-featured **Gym Management System** built with **Django** to help gym administrators manage members, memberships, attendance, trainers, payments, and reports through a modern and responsive dashboard.
 
