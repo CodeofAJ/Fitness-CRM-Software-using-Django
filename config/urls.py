@@ -9,22 +9,17 @@ from memberships.views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-
- # Authentication
+    # Authentication
     path(
         "accounts/login/",
-        auth_views.LoginView.as_view(
-            template_name="accounts/login.html"
-        ),
+        auth_views.LoginView.as_view(template_name="accounts/login.html"),
         name="login",
     ),
-
     path(
         "accounts/logout/",
         auth_views.LogoutView.as_view(),
         name="logout",
     ),
-
     path("", dashboard, name="dashboard"),
     path("members/", include("members.urls")),
     path("memberships/", include("memberships.urls")),
@@ -32,6 +27,7 @@ urlpatterns = [
     path("attendance/", include("attendance.urls")),
     path("trainers/", include("trainers.urls")),
     path("reports/", include("reports.urls")),
+    path("settings/", include("settings_app.urls")),
 ]
 
 

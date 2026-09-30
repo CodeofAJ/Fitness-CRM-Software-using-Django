@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "payments",
     "trainers",
     "reports",
+    "settings_app",
     
     # third part app
     #'Pillow'
